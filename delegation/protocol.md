@@ -7,15 +7,15 @@ This protocol defines how orchestrator agents delegate tasks to specialist agent
 ## Architecture
 
 ```
-Orchestrator (Sisyphus)
+Orchestrator (Apex-1)
   ↓ analyzes task
   ↓ identifies specialists
   ↓
-  ├─→ Oracle (architecture)
-  ├─→ CodeSmith (implementation)
-  ├─→ Pixel (UI/UX)
-  ├─→ Tester (testing)
-  └─→ Scribe (documentation)
+  ├─→ Atlas (architecture)
+  ├─→ Forge (implementation)
+  ├─→ Nova (UI/UX)
+  ├─→ Aegis (testing)
+  └─→ Quill (documentation)
   ↓
   ↓ integrates results
   ↓

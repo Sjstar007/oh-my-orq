@@ -25,16 +25,16 @@ Already installed with Antigravity IDE
 ### SubAgent Spawn
 
 ```powershell
-# Oracle (Codex로 아키텍처 설계)
+# Atlas (Codex로 아키텍처 설계)
 .\bin\oma-spawn.ps1 atlas "Design authentication system" `
     -Context "E-commerce, 100k users" `
     -AiBackend "codex"
 
-# Pixel (Gemini로 프론트엔드)
+# Nova (Gemini로 프론트엔드)
 .\bin\oma-spawn.ps1 nova "Create login UI" `
     -AiBackend "gemini-3.0-pro"
 
-# CodeSmith (Claude Code로 백엔드)
+# Forge (Claude Code로 백엔드)
 .\bin\oma-spawn.ps1 forge "Implement auth API" `
     -AiBackend "claude-code"
 

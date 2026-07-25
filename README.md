@@ -12,7 +12,7 @@
 
 ## ✨ Features
 
-- 🧠 **30 Specialized Agents** — Sisyphus, Oracle, CodeSmith, Pixel, Tester, Git Master, MCP Master, Hermes, and more
+- 🧠 **30 Specialized Agents** — Apex-1, Atlas, Forge, Nova, Aegis, Sync, Link, Hermes, and more
 - 🎭 **Smart AI Backend Routing** — Auto-selects best AI model (GPT/Claude/Gemini) per task & complexity
 - ⚡ **Delegation Protocol** — Structured `[DELEGATE TO: <agent>]` inter-agent communication syntax
 - 🧠 **Shared Memory (Project Cortex)** — Persistent, project-scoped SQLite/JSON memory surviving IDE restarts
@@ -40,60 +40,60 @@
 ### 🏔️ 1. Orchestration & Planning (3 Agents)
 | Agent Name | Role / Title | Assigned Model | Primary Specialty |
 | :--- | :--- | :--- | :--- |
-| **Sisyphus** | Master Orchestrator | `Claude Opus 4.8` | Project decomposition, delegation, integration & quality loops |
-| **Prometheus** | Strategic Planner | `Claude Sonnet 5` | 3–7 stage task breakdown, resource & token estimation |
-| **Metis** | Plan Consultant | `Claude Sonnet 5` | Plan validation, risk detection, and optimization review |
+| **Apex-1** | Master Orchestrator | `Claude Opus 4.8` | Project decomposition, delegation, integration & quality loops |
+| **Vector** | Strategic Planner | `Claude Sonnet 5` | 3–7 stage task breakdown, resource & token estimation |
+| **Aura** | Plan Consultant | `Claude Sonnet 5` | Plan validation, risk detection, and optimization review |
 
 ### 🏛️ 2. Architecture & Technical Strategy (3 Agents)
 | Agent Name | Role / Title | Assigned Model | Primary Specialty |
 | :--- | :--- | :--- | :--- |
-| **Oracle** | System Architect | `GPT-5.6 Sol` / `Opus` | System design, tech stack selection, Mermaid diagrams |
-| **Architect** | Database & API Designer | `Claude Sonnet 5` | SQL schemas, OpenAPI specs, REST/GraphQL design |
-| **Strategist** | Technical Decision Maker | `Claude Sonnet 5` | Build vs. buy analysis, trade-off matrices, ROI evaluation |
+| **Atlas** | System Nexus | `GPT-5.6 Sol` / `Opus` | System design, tech stack selection, Mermaid diagrams |
+| **Nexus** | Database & API Designer | `Claude Sonnet 5` | SQL schemas, OpenAPI specs, REST/GraphQL design |
+| **Lexicon** | Technical Decision Maker | `Claude Sonnet 5` | Build vs. buy analysis, trade-off matrices, ROI evaluation |
 
 ### ⚒️ 3. Software Development & Engineering (4 Agents)
 | Agent Name | Role / Title | Assigned Model | Primary Specialty |
 | :--- | :--- | :--- | :--- |
-| **CodeSmith** | Backend Implementation Expert | `Claude Sonnet 5` | Production backend code, SOLID principles, API endpoints |
-| **Pixel** | UI/UX & Frontend Specialist | `Gemini 2.5 Pro` | Modern responsive UI, CSS grid/glassmorphism, Google Fonts |
-| **Refactorer** | Code Quality Improver | `Claude Sonnet 5` | Code smell detection, DRY enforcement, function extraction |
-| **Performance Expert** | Optimization Specialist | `Claude Opus 4.8` | Profiling, database indexing, caching, Core Web Vitals |
+| **Forge** | Backend Implementation Expert | `Claude Sonnet 5` | Production backend code, SOLID principles, API endpoints |
+| **Nova** | UI/UX & Frontend Specialist | `Gemini 2.5 Pro` | Modern responsive UI, CSS grid/glassmorphism, Google Fonts |
+| **Prism** | Code Quality Improver | `Claude Sonnet 5` | Code smell detection, DRY enforcement, function extraction |
+| **Pulse** | Optimization Specialist | `Claude Opus 4.8` | Profiling, database indexing, caching, Core Web Vitals |
 
 ### 🧪 4. Testing, QA & Security (3 Agents)
 | Agent Name | Role / Title | Assigned Model | Primary Specialty |
 | :--- | :--- | :--- | :--- |
-| **Tester** | Automated Testing Expert | `GPT-5.6 Sol` | Unit & integration tests, Jest/pytest, 80%+ coverage target |
-| **QA Engineer** | Manual Testing Specialist | `Claude Haiku 4.5` | Test case creation, exploratory testing plans, bug filing |
-| **Security Guard** | Security Auditor | `Claude Opus 4.8` | OWASP Top 10 audits, input sanitization, secret detection |
+| **Aegis** | Automated Testing Expert | `GPT-5.6 Sol` | Unit & integration tests, Jest/pytest, 80%+ coverage target |
+| **Echo** | Manual Testing Specialist | `Claude Haiku 4.5` | Test case creation, exploratory testing plans, bug filing |
+| **Cyber** | Security Auditor | `Claude Opus 4.8` | OWASP Top 10 audits, input sanitization, secret detection |
 
 ### 📚 5. Research & Documentation (4 Agents)
 | Agent Name | Role / Title | Assigned Model | Primary Specialty |
 | :--- | :--- | :--- | :--- |
-| **Librarian** | Research Specialist | `Claude Haiku 4.5` | Documentation finding, code examples, library research |
-| **Explorer** | Code Navigator | `Claude Haiku 4.5` | High-speed ripgrep/grep search, symbol lookup |
-| **Scribe** | Technical Writer | `Claude Sonnet 5` | README generation, JSDoc, API docs, visual guides |
-| **Researcher** | Multi-Repo Analyst | `Claude Sonnet 5` | Cross-repository pattern extraction & industry benchmarking |
+| **Veritas** | Research Specialist | `Claude Haiku 4.5` | Documentation finding, code examples, library research |
+| **Tracker** | Code Navigator | `Claude Haiku 4.5` | High-speed ripgrep/grep search, symbol lookup |
+| **Quill** | Technical Writer | `Claude Sonnet 5` | README generation, JSDoc, API docs, visual guides |
+| **Intel** | Multi-Repo Analyst | `Claude Sonnet 5` | Cross-repository pattern extraction & industry benchmarking |
 
 ### 📊 6. Data & Analytics (5 Agents)
 | Agent Name | Role / Title | Assigned Model | Primary Specialty |
 | :--- | :--- | :--- | :--- |
-| **Scientist-Low** | Fast Data Explorer | `Claude Haiku 4.5` | Quick data loading, descriptive stats, basic cleaning |
-| **Scientist** | Standard Statistical Analyst | `Claude Sonnet 5` | Hypothesis testing, regression analysis, quality gates |
-| **Scientist-High** | Advanced Research Specialist | `Claude Opus 4.8` | Machine learning, causal inference, time-series forecasting |
-| **Data Wizard** | ETL Pipeline Expert | `Claude Sonnet 5` | Data validation, transform pipelines, ETL automation |
-| **SQL Master** | Database Query Specialist | `Claude Sonnet 5` | Complex SQL, EXPLAIN ANALYZE, window functions |
+| **Sigma-Low** | Fast Data Tracker | `Claude Haiku 4.5` | Quick data loading, descriptive stats, basic cleaning |
+| **Sigma** | Standard Statistical Analyst | `Claude Sonnet 5` | Hypothesis testing, regression analysis, quality gates |
+| **Sigma-High** | Advanced Research Specialist | `Claude Opus 4.8` | Machine learning, causal inference, time-series forecasting |
+| **Flow** | ETL Pipeline Expert | `Claude Sonnet 5` | Data validation, transform pipelines, ETL automation |
+| **Query** | Database Query Specialist | `Claude Sonnet 5` | Complex SQL, EXPLAIN ANALYZE, window functions |
 
 ### 🛠️ 7. Tools, Messaging, MCP & DevOps (8 Agents)
 | Agent Name | Role / Title | Assigned Model | Primary Specialty |
 | :--- | :--- | :--- | :--- |
-| **Debugger** | Bug Hunter | `GPT-5.6 Sol` | Error log analysis, stack trace reading, targeted quick fixes |
-| **Git Master** | Version Control & GitHub Expert | `Claude Haiku 4.5` | Atomic commits, branch rebase, `git pull/push`, PR creation |
-| **MCP Master** | Model Context Protocol Specialist | `Claude Sonnet 5` | Interfacing with GitHub, PostgreSQL, Web Search MCP servers |
+| **Viper** | Bug Hunter | `GPT-5.6 Sol` | Error log analysis, stack trace reading, targeted quick fixes |
+| **Sync** | Version Control & GitHub Expert | `Claude Haiku 4.5` | Atomic commits, branch rebase, `git pull/push`, PR creation |
+| **Link** | Model Context Protocol Specialist | `Claude Sonnet 5` | Interfacing with GitHub, PostgreSQL, Web Search MCP servers |
 | **Hermes** | Autonomous Messenger | `Claude Haiku 4.5` | System notifications, Slack/Discord webhooks, message logs |
-| **DevOps Engineer** | Deployment Specialist | `Claude Opus 4.8` | Docker containerization, CI/CD pipelines, cloud deployment |
-| **Playwright Master** | Browser Automation Expert | `Claude Sonnet 5` | E2E browser testing, page object models, web scraping |
-| **Multimodal Looker** | Visual Analysis Expert | `Claude Opus 4.8` | UI screenshot reviews, diagram parsing, OCR text extraction |
-| **Hello Orq** | Framework Demo Agent | `Claude Haiku 4.5` | Framework tutorials, installation verification & examples |
+| **Matrix** | Deployment Specialist | `Claude Opus 4.8` | Docker containerization, CI/CD pipelines, cloud deployment |
+| **Automata** | Browser Automation Expert | `Claude Sonnet 5` | E2E browser testing, page object models, web scraping |
+| **Vision** | Visual Analysis Expert | `Claude Opus 4.8` | UI screenshot reviews, diagram parsing, OCR text extraction |
+| **Orq-01** | Framework Demo Agent | `Claude Haiku 4.5` | Framework tutorials, installation verification & examples |
 
 ---
 

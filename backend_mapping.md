@@ -51,7 +51,7 @@
 
 ### Phase 1: Planning & Architecture
 
-#### 1. Prometheus (Planner)
+#### 1. Vector (Planner)
 ```json
 {
   "name": "vector",
@@ -69,11 +69,11 @@
 }
 ```
 
-#### 2. Oracle (Architect)
+#### 2. Atlas (Nexus)
 ```json
 {
   "name": "atlas",
-  "role": "System Architect",
+  "role": "System Nexus",
   "ai_backend": {
     "primary": "codex",
     "reason": "복잡하고 디테일한 아키텍처 설계에 강함"
@@ -89,7 +89,7 @@
 
 ### Phase 2: Implementation
 
-#### 3. Pixel (Frontend)
+#### 3. Nova (Frontend)
 ```json
 {
   "name": "nova",
@@ -109,7 +109,7 @@
 }
 ```
 
-#### 4. CodeSmith (Backend)
+#### 4. Forge (Backend)
 ```json
 {
   "name": "forge",
@@ -147,7 +147,7 @@
 
 ### Phase 3: Quality Assurance
 
-#### 5. Debugger (Bug Hunter)
+#### 5. Viper (Bug Hunter)
 ```json
 {
   "name": "viper",
@@ -165,7 +165,7 @@
 }
 ```
 
-#### 6. Tester (QA)
+#### 6. Aegis (QA)
 ```json
 {
   "name": "aegis",
@@ -193,7 +193,7 @@
 User Request: "Build e-commerce platform with React + Node.js"
      ↓
 ┌────────────────────────────────────────────────┐
-│ Sisyphus (Main Agent - Antigravity)            │
+│ Apex-1 (Main Agent - Antigravity)            │
 │ Analyzes → Creates execution plan              │
 └────────────────────────────────────────────────┘
      ↓
@@ -252,7 +252,7 @@ Phase 3: Quality (Sequential)
     RESULT: ✅ All tests passing
 
 ┌────────────────────────────────────────────────┐
-│ Sisyphus Integration                           │
+│ Apex-1 Integration                           │
 │ → Complete E-commerce Platform                 │
 │ → Frontend (React) ✓                           │
 │ → Backend (Node.js) ✓                          │
@@ -265,7 +265,7 @@ Phase 3: Quality (Sequential)
 
 ## 🎯 Smart AI Selection Logic
 
-### Sisyphus Decision Algorithm
+### Apex-1 Decision Algorithm
 
 ```python
 def select_ai_backend(subagent, task, context):

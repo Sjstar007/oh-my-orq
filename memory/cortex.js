@@ -475,8 +475,8 @@ function main() {
       console.log(`  ✅ Summary: ${summary.total.input + summary.total.output} total tokens, $${summary.total.cost.toFixed(4)}`);
 
       // Test prompt cache
-      const cache1 = store.cachePrompt('You are Oracle, the System Architect...', 'atlas');
-      const cache2 = store.cachePrompt('You are Oracle, the System Architect...', 'atlas');
+      const cache1 = store.cachePrompt('You are Atlas, the System Nexus...', 'atlas');
+      const cache2 = store.cachePrompt('You are Atlas, the System Nexus...', 'atlas');
       console.log(`  ✅ Prompt cache: miss=${!cache1.cached}, hit=${cache2.cached}`);
 
       // Test export

@@ -7,15 +7,15 @@ Defines how OMA skills delegate tasks to each other for collaborative problem-so
 ## 🏗️ Architecture
 
 ```
-Orchestrator (Sisyphus)
+Orchestrator (Apex-1)
   ↓ analyzes task
   ↓ identifies specialists
   ↓
-  ├─→ Oracle (architecture)
-  ├─→ CodeSmith (implementation)  
-  ├─→ Pixel (UI/UX)
-  ├─→ Tester (testing)
-  └─→ Scribe (documentation)
+  ├─→ Atlas (architecture)
+  ├─→ Forge (implementation)  
+  ├─→ Nova (UI/UX)
+  ├─→ Aegis (testing)
+  └─→ Quill (documentation)
   ↓
   ↓ integrates results
   ↓
@@ -178,7 +178,7 @@ OUTPUT: Architecture diagram + technology choices with rationale
 ```markdown
 User Request: "Build user authentication system"
 
-Sisyphus analyzes:
+Apex-1 analyzes:
 - Complexity: High (requires multiple specialists)
 - Domains: Architecture, Security, Implementation, Testing, Docs
 - Specialists needed: 6
@@ -238,7 +238,7 @@ CONTEXT: Implementation + Tests
 ### 4. Result Integration
 
 ```markdown
-Sisyphus combines all results:
+Apex-1 combines all results:
 - Architecture (from atlas)
 - Security checklist (from cyber)
 - Database schema (from nexus)
@@ -256,7 +256,7 @@ For independent tasks:
 ```markdown
 User: "Optimize application performance"
 
-Sisyphus delegates in parallel:
+Apex-1 delegates in parallel:
 
 [PARALLEL START]
   ├─→ pulse: Profile CPU/memory

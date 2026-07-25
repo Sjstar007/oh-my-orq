@@ -1,14 +1,14 @@
-# Oh My Antigravity - Agent Catalog
+# oh-my-orq - Agent Catalog
 
 ## 🎯 Overview
 
-This document lists all 28 specialized agents in the Oh My Antigravity framework.
+This document lists all 30 specialized agents in the oh-my-orq framework.
 
 ## 📊 Agent Categories
 
 ### 🎭 Orchestration (3 agents)
 
-#### 1. Sisyphus
+#### 1. Apex-1
 - **Role**: Master Orchestrator
 - **Specialty**: Task delegation and workflow coordination
 - **Model Tier**: High (Opus-class)
@@ -19,7 +19,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
   - Ralph Loop enforcement
 - **When to Use**: Complex multi-step projects
 
-#### 2. Prometheus
+#### 2. Vector
 - **Role**: Strategic Planner
 - **Specialty**: Plan creation and task breakdown
 - **Model Tier**: High (Sonnet-class)
@@ -30,7 +30,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
   - Risk assessment
 - **When to Use**: Need detailed execution plan
 
-#### 3. Metis
+#### 3. Aura
 - **Role**: Plan Consultant
 - **Specialty**: Plan validation and improvement
 - **Model Tier**: Mid (Sonnet-class)
@@ -45,8 +45,8 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
 
 ### 🏗️ Architecture & Strategy (3 agents)
 
-#### 4. Oracle
-- **Role**: System Architect
+#### 4. Atlas
+- **Role**: System Nexus
 - **Specialty**: High-level design and strategy
 - **Model Tier**: High (Opus-class)
 - **Key Abilities**:
@@ -56,7 +56,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
   - Performance analysis
 - **When to Use**: Starting new projects, major refactoring
 
-#### 5. Architect
+#### 5. Nexus
 - **Role**: Database & API Designer
 - **Specialty**: Schema and API architecture
 - **Model Tier**: Mid (Sonnet-class)
@@ -67,7 +67,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
   - Integration patterns
 - **When to Use**: Designing data models and APIs
 
-#### 6. Strategist
+#### 6. Lexicon
 - **Role**: Technical Decision Maker
 - **Specialty**: Build vs buy, tech selection
 - **Model Tier**: Mid (Sonnet-class)
@@ -82,7 +82,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
 
 ### 💻 Development (4 agents)
 
-#### 7. CodeSmith
+#### 7. Forge
 - **Role**: Backend Implementation Expert
 - **Specialty**: Production-ready code
 - **Model Tier**: Mid (Sonnet-class)
@@ -93,7 +93,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
   - Type safety
 - **When to Use**: Implementing business logic
 
-#### 8. Pixel
+#### 8. Nova
 - **Role**: UI/UX Specialist
 - **Specialty**: Frontend and interface design
 - **Model Tier**: Mid (Sonnet-class)
@@ -104,7 +104,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
   - Modern CSS
 - **When to Use**: Building user interfaces
 
-#### 9. Refactorer
+#### 9. Prism
 - **Role**: Code Quality Improver
 - **Specialty**: Refactoring and clean code
 - **Model Tier**: Mid (Sonnet-class)
@@ -115,7 +115,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
   - Code smell detection
 - **When to Use**: Improving existing code
 
-#### 10. Performance Expert
+#### 10. Pulse
 - **Role**: Optimization Specialist
 - **Specialty**: Speed and efficiency
 - **Model Tier**: High (Opus-class)
@@ -130,7 +130,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
 
 ### 🧪 Testing & Quality (3 agents)
 
-#### 11. Tester
+#### 11. Aegis
 - **Role**: Automated Testing Expert
 - **Specialty**: Unit and integration tests
 - **Model Tier**: Mid (Sonnet-class)
@@ -141,7 +141,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
   - AAA pattern
 - **When to Use**: Need automated tests
 
-#### 12. QA Engineer
+#### 12. Echo
 - **Role**: Manual Testing Specialist
 - **Specialty**: Test planning and execution
 - **Model Tier**: Low (Haiku-class)
@@ -152,7 +152,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
   - Test planning
 - **When to Use**: Manual testing needed
 
-#### 13. Security Guard
+#### 13. Cyber
 - **Role**: Security Specialist
 - **Specialty**: Vulnerability detection
 - **Model Tier**: High (Opus-class)
@@ -167,7 +167,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
 
 ### 📚 Research & Documentation (4 agents)
 
-#### 14. Librarian
+#### 14. Veritas
 - **Role**: Research Specialist
 - **Specialty**: Finding docs and examples
 - **Model Tier**: Low (Haiku-class)
@@ -178,7 +178,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
   - Best practice research
 - **When to Use**: Learning new technology
 
-#### 15. Explorer
+#### 15. Tracker
 - **Role**: Code Navigator
 - **Specialty**: Fast codebase search
 - **Model Tier**: Low (Haiku-class)
@@ -189,7 +189,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
   - Symbol search
 - **When to Use**: Navigate large codebase
 
-#### 16. Scribe
+#### 16. Quill
 - **Role**: Technical Writer
 - **Specialty**: Documentation creation
 - **Model Tier**: Mid (Sonnet-class)
@@ -200,7 +200,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
   - Architecture docs
 - **When to Use**: Documentation needed
 
-#### 17. Researcher
+#### 17. Intel
 - **Role**: Multi-Repo Analyst
 - **Specialty**: Cross-repository research
 - **Model Tier**: Mid (Sonnet-class)
@@ -215,8 +215,8 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
 
 ### 📊 Data & Analysis (5 agents)
 
-#### 18. Scientist (Low)
-- **Role**: Fast Data Explorer
+#### 18. Sigma (Low)
+- **Role**: Fast Data Tracker
 - **Specialty**: Quick analysis
 - **Model Tier**: Low (Haiku-class)
 - **Key Abilities**:
@@ -226,7 +226,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
   - Data cleaning
 - **When to Use**: Initial data exploration
 
-#### 19. Scientist (Mid)
+#### 19. Sigma (Mid)
 - **Role**: Standard Analyst
 - **Specialty**: Statistical analysis
 - **Model Tier**: Mid (Sonnet-class)
@@ -237,7 +237,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
   - Advanced viz
 - **When to Use**: Standard analysis
 
-#### 20. Scientist (High)
+#### 20. Sigma (High)
 - **Role**: Research Specialist
 - **Specialty**: Advanced ML & research
 - **Model Tier**: High (Opus-class)
@@ -248,7 +248,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
   - Feature engineering
 - **When to Use**: Complex research
 
-#### 21. Data Wizard
+#### 21. Flow
 - **Role**: ETL Expert
 - **Specialty**: Data pipelines
 - **Model Tier**: Mid (Sonnet-class)
@@ -259,7 +259,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
   - Quality checks
 - **When to Use**: Data processing
 
-#### 22. SQL Master
+#### 22. Query
 - **Role**: Database Expert
 - **Specialty**: Query optimization
 - **Model Tier**: Mid (Sonnet-class)
@@ -274,7 +274,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
 
 ### 🔧 Specialized Tools (6 agents)
 
-#### 23. Debugger
+#### 23. Viper
 - **Role**: Bug Hunter
 - **Specialty**: Finding and fixing bugs
 - **Model Tier**: Mid (Sonnet-class)
@@ -285,7 +285,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
   - Quick fixes
 - **When to Use**: Bugs to fix
 
-#### 24. Git Master
+#### 24. Sync
 - **Role**: Version Control Expert
 - **Specialty**: Git and commits
 - **Model Tier**: Low (Haiku-class)
@@ -296,7 +296,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
   - Auto-commit mode
 - **When to Use**: Version control
 
-#### 25. DevOps Engineer
+#### 25. Matrix
 - **Role**: Deployment Specialist
 - **Specialty**: CI/CD and infrastructure
 - **Model Tier**: High (Opus-class)
@@ -307,7 +307,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
   - Monitoring
 - **When to Use**: Deployment setup
 
-#### 26. Playwright Master
+#### 26. Automata
 - **Role**: Browser Automation Expert
 - **Specialty**: E2E testing
 - **Model Tier**: Mid (Sonnet-class)
@@ -318,7 +318,7 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
   - Screenshots
 - **When to Use**: Browser automation
 
-#### 27. Multimodal Looker
+#### 27. Vision
 - **Role**: Visual Analysis Expert
 - **Specialty**: Image & video analysis
 - **Model Tier**: High (Vision-capable)
@@ -345,17 +345,17 @@ This document lists all 28 specialized agents in the Oh My Antigravity framework
 
 ### Simple Task
 ```
-User → CodeSmith → Done
+User → Forge → Done
 ```
 
 ### Complex Task (Ultrawork)
 ```
-User → Sisyphus → Prometheus → [Oracle, CodeSmith, Pixel, Tester] → Done
+User → Apex-1 → Vector → [Atlas, Forge, Nova, Aegis] → Done
 ```
 
 ### Research Task
 ```
-User → /research → [Scientist-Low, Scientist, Scientist-High] → Report
+User → /research → [Sigma-Low, Sigma, Sigma-High] → Report
 ```
 
 ---
