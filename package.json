@@ -1,6 +1,6 @@
 {
   "name": "oh-my-orq",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Multi-agent orchestration framework for AI-powered application generation — 28 specialized agents with shared memory, token optimization, and usage dashboard",
   "main": "cli/install.js",
   "bin": {
@@ -8,7 +8,7 @@
     "oh-my-orq": "cli/install.js"
   },
   "scripts": {
-    "postinstall": "node cli/install.js",
+    "postinstall": "node cli/postinstall.js",
     "test": "node memory/cortex.js --test && node token-optimization/optimizer.js --test",
     "test:memory": "node memory/cortex.js --test",
     "test:optimizer": "node token-optimization/optimizer.js --test",

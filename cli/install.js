@@ -8,16 +8,15 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+const { execSync } = require('child_process');
 
 console.log(`
-   ___                    _   _____                    
-  / _ \\                  | | |  ___|                   
- / /_\\ \\ __ _  ___ _ __ | |_| |_ ___  _ __ __ _  ___ 
- |  _  |/ _\` |/ _ \\ '_ \\| __|  _/ _ \\| '__/ _\` |/ _ \\
- | | | | (_| |  __/ | | | |_| || (_) | | | (_| |  __/
- \\_| |_/\\__, |\\___|_| |_|\\__|_| \\___/|_|  \\__, |\\___|
-         __/ |                              __/ |     
-        |___/                              |___/      
+  ___  _   _  ___  ___   _   _  ___  ___  _____ 
+ / _ \\| | | ||  \\/  |  | | | / _ \\| ___ \\|  _  |
+/ /_\\ \\ |_| || .  . |  | |_| / /_\\ \\ |_/ /| | | |
+|  _  |  _  || |\\/| |  |  _  |  _  |    / | | | |
+| | | | | | || |  | |  | | | | | | | |\\ \\ \\ \\/' /
+\\_| |_/\\_| |_/\\_|  |_/  \\_| |_/\\_| |_/\\_| \\_|\\_/ 
 
   ⚡ Multi-Agent Orchestration Framework
 `);
@@ -26,12 +25,16 @@ console.log('Installing Oh My Orq...\n');
 
 const homeDir = os.homedir();
 const orqHome = path.join(homeDir, '.oh-my-orq');
+const orqAppDir = path.join(orqHome, 'app');
+const orqBinDir = path.join(orqHome, 'bin');
 const antigravityHome = path.join(homeDir, '.gemini', 'antigravity');
 const sourceDir = path.resolve(__dirname, '..');
 
 // Directories to create
 const dirs = [
   orqHome,
+  orqAppDir,
+  orqBinDir,
   path.join(orqHome, 'memory'),
   path.join(orqHome, 'cache'),
   path.join(orqHome, 'sessions'),
@@ -47,7 +50,10 @@ dirs.forEach(dir => {
   }
 });
 
-// Copy skills
+// Copy full app framework to ~/.oh-my-orq/app
+copyDirSync(sourceDir, orqAppDir);
+
+// Copy skills to Antigravity IDE directory
 const skillsSource = path.join(sourceDir, 'skills');
 const skillsDest = path.join(antigravityHome, 'skills');
 
@@ -65,7 +71,7 @@ if (fs.existsSync(skillsSource)) {
   console.log(`  ✓ Installed ${installed} agent skills to ${skillsDest}`);
 }
 
-// Copy workflows
+// Copy workflows to Antigravity IDE directory
 const workflowsSource = path.join(sourceDir, 'workflows');
 const workflowsDest = path.join(antigravityHome, 'workflows');
 
@@ -77,11 +83,49 @@ if (fs.existsSync(workflowsSource)) {
   console.log(`  ✓ Installed ${workflows.length} workflows to ${workflowsDest}`);
 }
 
+// Create binary script in ~/.oh-my-orq/bin/orq
+const orqBinFile = path.join(orqBinDir, 'orq');
+const binScriptContent = `#!/bin/sh\nexec node "${path.join(orqAppDir, 'cli', 'orq.js')}" "$@"\n`;
+fs.writeFileSync(orqBinFile, binScriptContent, { mode: 0o755 });
+
+// Also write executable permissions
+try {
+  fs.chmodSync(path.join(orqAppDir, 'cli', 'orq.js'), 0o755);
+} catch (e) {}
+
+// Auto-add alias & PATH to ~/.zshrc and ~/.bashrc
+const shellConfigs = ['.zshrc', '.bashrc'].map(file => path.join(homeDir, file));
+const exportSnippet = `\n# oh-my-orq CLI\nexport PATH="$HOME/.oh-my-orq/bin:$PATH"\nalias orq="node $HOME/.oh-my-orq/app/cli/orq.js"\n`;
+
+for (const shConfig of shellConfigs) {
+  if (fs.existsSync(shConfig)) {
+    try {
+      const content = fs.readFileSync(shConfig, 'utf-8');
+      if (!content.includes('.oh-my-orq/bin') && !content.includes('alias orq=')) {
+        fs.appendFileSync(shConfig, exportSnippet);
+        console.log(`  ✓ Added 'orq' alias & PATH to ${shConfig}`);
+      }
+    } catch (e) {}
+  }
+}
+
+// Try system global bin targets
+['/usr/local/bin/orq', path.join(homeDir, '.local', 'bin', 'orq')].forEach(binPath => {
+  try {
+    if (!fs.existsSync(path.dirname(binPath))) {
+      fs.mkdirSync(path.dirname(binPath), { recursive: true });
+    }
+    fs.writeFileSync(binPath, binScriptContent, { mode: 0o755 });
+  } catch (e) {}
+});
+
 // Save installation info
 const installInfo = {
-  version: require(path.join(sourceDir, 'package.json')).version || '1.0.0',
+  version: require(path.join(sourceDir, 'package.json')).version || '1.0.2',
   installedAt: new Date().toISOString(),
   homeDir: orqHome,
+  appDir: orqAppDir,
+  binDir: orqBinDir,
   skillsDir: skillsDest,
   workflowsDir: workflowsDest,
   platform: os.platform(),
@@ -97,24 +141,30 @@ console.log(`\n🎉 Oh My Orq installed successfully!\n`);
 console.log(`  Skills:    ${skillsDest}`);
 console.log(`  Workflows: ${workflowsDest}`);
 console.log(`  Memory:    ${path.join(orqHome, 'memory')}`);
-console.log(`  Dashboard: Open dashboard/index.html in your browser`);
-console.log(`\n  Usage:`);
+console.log(`  App Home:  ${orqAppDir}\n`);
+
+console.log(`💡 To use 'orq' in current terminal window, run:`);
+console.log(`   source ~/.zshrc    (or open a new terminal tab)\n`);
+console.log(`  Or install globally with NPM:`);
+console.log(`   npm install -g oh-my-orq\n`);
+console.log(`  Usage:`);
 console.log(`    orq list              List all agents`);
+console.log(`    orq graph             Open interactive architecture graph`);
 console.log(`    orq memory save "..."  Save a memory`);
-console.log(`    orq memory recall "..."  Search memories`);
-console.log(`    orq tokens             Show token usage`);
-console.log(`    orq dashboard          Open dashboard\n`);
+console.log(`    orq memory recall "..." Search memories`);
+console.log(`    orq coach             Run quality health check`);
+console.log(`    orq dashboard          Open usage dashboard\n`);
 
 // ============================================
 // UTILITIES
 // ============================================
-
 function copyDirSync(src, dest) {
   if (!fs.existsSync(dest)) {
     fs.mkdirSync(dest, { recursive: true });
   }
   const entries = fs.readdirSync(src);
   for (const entry of entries) {
+    if (entry === 'node_modules' || entry === '.git') continue;
     const srcPath = path.join(src, entry);
     const destPath = path.join(dest, entry);
     if (fs.statSync(srcPath).isDirectory()) {
