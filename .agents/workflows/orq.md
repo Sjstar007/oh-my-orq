@@ -140,7 +140,7 @@ Print this banner:
 ```
 
 ### 4a. End Session & Export Dashboard
-Run these commands to finalize tracking:
+Run these commands to finalize tracking and open your dashboard:
 ```bash
 # End the session (auto-calculates totals)
 node memory/cortex.js end-session
@@ -148,8 +148,8 @@ node memory/cortex.js end-session
 # Show token usage summary
 node memory/cortex.js tokens
 
-# Export dashboard data
-node memory/cortex.js export
+# Export dashboard data & open live dashboard in browser
+node cli/orq.js dashboard
 ```
 
 ### 4b. Final Delivery
