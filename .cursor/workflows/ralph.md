@@ -11,8 +11,8 @@ Run the Ralph Quality Review loop using specialized quality & testing agents.
 ## Step 0 — Harness & Memory Setup
 
 ```bash
-node memory/cortex.js start-session "Ralph Quality Review Loop"
-node memory/cortex.js recall "quality review standards"
+node .oh-my-orq/memory/cortex.js start-session "Ralph Quality Review Loop"
+node .oh-my-orq/memory/cortex.js recall "quality review standards"
 ```
 
 ---
@@ -53,13 +53,13 @@ Score the overall quality (1–10). If score < 8, iterate and fix.
 Print: `🤖 [STAGE 4/4] RALPH FINAL REPORT & DASHBOARD EXPORT`
 
 ```bash
-node memory/cortex.js track-tokens --agent prism --input 3000 --output 2500 --cost 0.05 --task review
-node memory/cortex.js track-tokens --agent pulse --input 2500 --output 2000 --cost 0.04 --task performance
-node memory/cortex.js track-tokens --agent aegis --input 4000 --output 3000 --cost 0.07 --task testing
-node memory/cortex.js track-tokens --agent cyber --input 3000 --output 2000 --cost 0.05 --task security
-node memory/cortex.js track-tokens --agent viper --input 2000 --output 1500 --cost 0.03 --task debugging
-node memory/cortex.js save "Ralph Quality Review completed score: <score>/10" --type lesson
-node memory/cortex.js end-session
-node memory/cortex.js tokens
+node .oh-my-orq/memory/cortex.js track-tokens --agent prism --input 3000 --output 2500 --cost 0.05 --task review
+node .oh-my-orq/memory/cortex.js track-tokens --agent pulse --input 2500 --output 2000 --cost 0.04 --task performance
+node .oh-my-orq/memory/cortex.js track-tokens --agent aegis --input 4000 --output 3000 --cost 0.07 --task testing
+node .oh-my-orq/memory/cortex.js track-tokens --agent cyber --input 3000 --output 2000 --cost 0.05 --task security
+node .oh-my-orq/memory/cortex.js track-tokens --agent viper --input 2000 --output 1500 --cost 0.03 --task debugging
+node .oh-my-orq/memory/cortex.js save "Ralph Quality Review completed score: <score>/10" --type lesson
+node .oh-my-orq/memory/cortex.js end-session
+node .oh-my-orq/memory/cortex.js tokens
 node cli/orq.js dashboard
 ```

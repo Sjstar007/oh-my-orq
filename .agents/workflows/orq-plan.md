@@ -11,8 +11,8 @@ Run strategic planning and system architecture design for the user's prompt.
 ## Step 0 — Initialize
 
 ```bash
-node memory/cortex.js start-session "Plan: <brief prompt summary>"
-node memory/cortex.js recall "<prompt keywords>"
+node .oh-my-orq/memory/cortex.js start-session "Plan: <brief prompt summary>"
+node .oh-my-orq/memory/cortex.js recall "<prompt keywords>"
 ```
 
 Read recalled memories. Apply any past decisions to the planning below.
@@ -30,7 +30,7 @@ Print: `🤖 [AGENT: Vector] Creating 3–7 stage execution roadmap...`
   - Risk factors and mitigation strategies
 
 ```bash
-node memory/cortex.js track-tokens --agent vector --input 3000 --output 2000 --cost 0.05 --task planning
+node .oh-my-orq/memory/cortex.js track-tokens --agent vector --input 3000 --output 2000 --cost 0.05 --task planning
 ```
 
 ---
@@ -47,7 +47,7 @@ Print: `🤖 [AGENT: Aura] Reviewing plan and identifying risks...`
   - Missing requirements
 
 ```bash
-node memory/cortex.js track-tokens --agent aura --input 2000 --output 1500 --cost 0.03 --task review
+node .oh-my-orq/memory/cortex.js track-tokens --agent aura --input 2000 --output 1500 --cost 0.03 --task review
 ```
 
 ---
@@ -65,8 +65,8 @@ Print: `🤖 [AGENT: Nexus] Designing database schemas and API contracts...`
   - Technology stack selection with rationale
 
 ```bash
-node memory/cortex.js track-tokens --agent atlas --input 2500 --output 2000 --cost 0.04 --task architecture
-node memory/cortex.js track-tokens --agent nexus --input 2000 --output 1800 --cost 0.035 --task architecture
+node .oh-my-orq/memory/cortex.js track-tokens --agent atlas --input 2500 --output 2000 --cost 0.04 --task architecture
+node .oh-my-orq/memory/cortex.js track-tokens --agent nexus --input 2000 --output 1800 --cost 0.035 --task architecture
 ```
 
 ---
@@ -74,9 +74,9 @@ node memory/cortex.js track-tokens --agent nexus --input 2000 --output 1800 --co
 ## Step 4 — Save & Finalize
 
 ```bash
-node memory/cortex.js save "Plan complete: <one-line summary of architecture decisions>" --type decision
-node memory/cortex.js end-session
-node memory/cortex.js tokens
+node .oh-my-orq/memory/cortex.js save "Plan complete: <one-line summary of architecture decisions>" --type decision
+node .oh-my-orq/memory/cortex.js end-session
+node .oh-my-orq/memory/cortex.js tokens
 ```
 
 Present the validated technical plan to the user for review and approval.

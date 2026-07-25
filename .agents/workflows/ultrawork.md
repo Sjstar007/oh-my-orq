@@ -11,8 +11,8 @@ Execute full autonomous orchestration using **Apex-1** and specialist agents.
 ## Step 0 — Harness & Memory Setup
 
 ```bash
-node memory/cortex.js start-session "Ultrawork Autonomous Execution"
-node memory/cortex.js recall "<project prompt keywords>"
+node .oh-my-orq/memory/cortex.js start-session "Ultrawork Autonomous Execution"
+node .oh-my-orq/memory/cortex.js recall "<project prompt keywords>"
 ```
 
 ---
@@ -36,10 +36,10 @@ Print: `🤖 [AGENT: Nexus] Designing database schemas and API contracts...`
 - Read skills: `.agents/skills/atlas/SKILL.md` and `.agents/skills/nexus/SKILL.md`
 
 ```bash
-node memory/cortex.js track-tokens --agent vector --input 3000 --output 2000 --cost 0.05 --task planning
-node memory/cortex.js track-tokens --agent aura --input 2000 --output 1500 --cost 0.03 --task planning
-node memory/cortex.js track-tokens --agent atlas --input 3000 --output 2500 --cost 0.05 --task architecture
-node memory/cortex.js track-tokens --agent nexus --input 2500 --output 2000 --cost 0.04 --task architecture
+node .oh-my-orq/memory/cortex.js track-tokens --agent vector --input 3000 --output 2000 --cost 0.05 --task planning
+node .oh-my-orq/memory/cortex.js track-tokens --agent aura --input 2000 --output 1500 --cost 0.03 --task planning
+node .oh-my-orq/memory/cortex.js track-tokens --agent atlas --input 3000 --output 2500 --cost 0.05 --task architecture
+node .oh-my-orq/memory/cortex.js track-tokens --agent nexus --input 2500 --output 2000 --cost 0.04 --task architecture
 ```
 
 ---
@@ -62,10 +62,10 @@ Print: `🤖 [AGENT: Link] Executing MCP tool integrations...`
 - Read skill: `.agents/skills/link/SKILL.md`
 
 ```bash
-node memory/cortex.js track-tokens --agent forge --input 6000 --output 5000 --cost 0.12 --task backend
-node memory/cortex.js track-tokens --agent query --input 2000 --output 1500 --cost 0.03 --task database
-node memory/cortex.js track-tokens --agent nova --input 5000 --output 4000 --cost 0.10 --task frontend
-node memory/cortex.js track-tokens --agent link --input 1500 --output 1000 --cost 0.02 --task mcp
+node .oh-my-orq/memory/cortex.js track-tokens --agent forge --input 6000 --output 5000 --cost 0.12 --task backend
+node .oh-my-orq/memory/cortex.js track-tokens --agent query --input 2000 --output 1500 --cost 0.03 --task database
+node .oh-my-orq/memory/cortex.js track-tokens --agent nova --input 5000 --output 4000 --cost 0.10 --task frontend
+node .oh-my-orq/memory/cortex.js track-tokens --agent link --input 1500 --output 1000 --cost 0.02 --task mcp
 ```
 
 ---
@@ -83,9 +83,9 @@ Print: `🤖 [AGENT: Aegis] Writing automated unit and integration tests (target
 Print: `🤖 [AGENT: Cyber] Running OWASP Top 10 security audit...`
 
 ```bash
-node memory/cortex.js track-tokens --agent prism --input 3000 --output 2500 --cost 0.05 --task refactoring
-node memory/cortex.js track-tokens --agent aegis --input 4000 --output 3000 --cost 0.07 --task testing
-node memory/cortex.js track-tokens --agent cyber --input 3000 --output 2000 --cost 0.05 --task security
+node .oh-my-orq/memory/cortex.js track-tokens --agent prism --input 3000 --output 2500 --cost 0.05 --task refactoring
+node .oh-my-orq/memory/cortex.js track-tokens --agent aegis --input 4000 --output 3000 --cost 0.07 --task testing
+node .oh-my-orq/memory/cortex.js track-tokens --agent cyber --input 3000 --output 2000 --cost 0.05 --task security
 ```
 
 ---
@@ -99,10 +99,10 @@ Print: `🤖 [AGENT: Quill] Generating README and documentation...`
 Print: `🤖 [AGENT: Sync] Creating git commits...`
 
 ```bash
-node memory/cortex.js track-tokens --agent quill --input 2000 --output 1500 --cost 0.03 --task docs
-node memory/cortex.js track-tokens --agent sync --input 1000 --output 500 --cost 0.01 --task git
-node memory/cortex.js save "Ultrawork completed full application build" --type architecture
-node memory/cortex.js end-session
-node memory/cortex.js tokens
+node .oh-my-orq/memory/cortex.js track-tokens --agent quill --input 2000 --output 1500 --cost 0.03 --task docs
+node .oh-my-orq/memory/cortex.js track-tokens --agent sync --input 1000 --output 500 --cost 0.01 --task git
+node .oh-my-orq/memory/cortex.js save "Ultrawork completed full application build" --type architecture
+node .oh-my-orq/memory/cortex.js end-session
+node .oh-my-orq/memory/cortex.js tokens
 node cli/orq.js dashboard
 ```

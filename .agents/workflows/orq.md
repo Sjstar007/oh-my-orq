@@ -33,10 +33,10 @@ Before doing ANY work, run these commands to activate the framework harness:
 
 ```bash
 # Start a tracking session
-node memory/cortex.js start-session "Orq: <brief user prompt summary>"
+node .oh-my-orq/memory/cortex.js start-session "Orq: <brief user prompt summary>"
 
 # Recall relevant project memories
-node memory/cortex.js recall "<user prompt keywords>"
+node .oh-my-orq/memory/cortex.js recall "<user prompt keywords>"
 ```
 
 Read the recalled memories output carefully. Use any past decisions, patterns, or architectural context to inform your work below.
@@ -71,10 +71,10 @@ Print: `🤖 [AGENT: Nexus] Designing database schemas and APIs...`
 ### 1d. Track Planning Tokens
 After completing the plan stage, run:
 ```bash
-node memory/cortex.js track-tokens --agent vector --input 3000 --output 2000 --cost 0.05 --task planning
-node memory/cortex.js track-tokens --agent aura --input 2000 --output 1500 --cost 0.03 --task planning
-node memory/cortex.js track-tokens --agent atlas --input 2500 --output 2000 --cost 0.04 --task architecture
-node memory/cortex.js save "Plan: <brief plan summary>" --type decision
+node .oh-my-orq/memory/cortex.js track-tokens --agent vector --input 3000 --output 2000 --cost 0.05 --task planning
+node .oh-my-orq/memory/cortex.js track-tokens --agent aura --input 2000 --output 1500 --cost 0.03 --task planning
+node .oh-my-orq/memory/cortex.js track-tokens --agent atlas --input 2500 --output 2000 --cost 0.04 --task architecture
+node .oh-my-orq/memory/cortex.js save "Plan: <brief plan summary>" --type decision
 ```
 
 ---
@@ -108,9 +108,9 @@ Print: `🤖 [AGENT: Sync] Managing git operations...`
 
 ### 2e. Track Implementation Tokens
 ```bash
-node memory/cortex.js track-tokens --agent forge --input 5000 --output 4000 --cost 0.10 --task backend
-node memory/cortex.js track-tokens --agent nova --input 4000 --output 3500 --cost 0.08 --task frontend
-node memory/cortex.js save "Architecture: <key implementation decisions>" --type architecture
+node .oh-my-orq/memory/cortex.js track-tokens --agent forge --input 5000 --output 4000 --cost 0.10 --task backend
+node .oh-my-orq/memory/cortex.js track-tokens --agent nova --input 4000 --output 3500 --cost 0.08 --task frontend
+node .oh-my-orq/memory/cortex.js save "Architecture: <key implementation decisions>" --type architecture
 ```
 
 ---
@@ -142,9 +142,9 @@ Print: `🤖 [AGENT: Cyber] Running security audit...`
 
 ### 3e. Track Review Tokens
 ```bash
-node memory/cortex.js track-tokens --agent prism --input 3000 --output 2500 --cost 0.05 --task refactoring
-node memory/cortex.js track-tokens --agent aegis --input 4000 --output 3000 --cost 0.07 --task testing
-node memory/cortex.js save "Quality: <quality review findings>" --type lesson
+node .oh-my-orq/memory/cortex.js track-tokens --agent prism --input 3000 --output 2500 --cost 0.05 --task refactoring
+node .oh-my-orq/memory/cortex.js track-tokens --agent aegis --input 4000 --output 3000 --cost 0.07 --task testing
+node .oh-my-orq/memory/cortex.js save "Quality: <quality review findings>" --type lesson
 ```
 
 ---
@@ -162,7 +162,7 @@ Print this banner:
 Run these commands to finalize tracking and open your dashboard:
 ```bash
 # End the session (auto-calculates totals)
-node memory/cortex.js end-session
+node .oh-my-orq/memory/cortex.js end-session
 
 # Show token usage summary
 node memory/cortex.js tokens

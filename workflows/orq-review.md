@@ -11,8 +11,8 @@ Run comprehensive quality review, testing, and security audit on the codebase.
 ## Step 0 — Initialize
 
 ```bash
-node memory/cortex.js start-session "Review: <brief prompt summary>"
-node memory/cortex.js recall "<prompt keywords>"
+node .oh-my-orq/memory/cortex.js start-session "Review: <brief prompt summary>"
+node .oh-my-orq/memory/cortex.js recall "<prompt keywords>"
 ```
 
 Read recalled memories. Apply any past bug patterns or quality lessons.
@@ -31,7 +31,7 @@ Print: `🤖 [AGENT: Prism] Refactoring code for clarity and quality...`
   - Design pattern opportunities — factory, strategy, observer where appropriate
 
 ```bash
-node memory/cortex.js track-tokens --agent prism --input 3000 --output 2500 --cost 0.05 --task refactoring
+node .oh-my-orq/memory/cortex.js track-tokens --agent prism --input 3000 --output 2500 --cost 0.05 --task refactoring
 ```
 
 ---
@@ -49,7 +49,7 @@ Print: `🤖 [AGENT: Pulse] Profiling for performance bottlenecks...`
   - Frontend: unnecessary re-renders, large bundle sizes, CWV issues
 
 ```bash
-node memory/cortex.js track-tokens --agent pulse --input 2500 --output 2000 --cost 0.04 --task performance
+node .oh-my-orq/memory/cortex.js track-tokens --agent pulse --input 2500 --output 2000 --cost 0.04 --task performance
 ```
 
 ---
@@ -66,7 +66,7 @@ Print: `🤖 [AGENT: Aegis] Writing unit and integration tests...`
   - Include edge cases and error scenarios
 
 ```bash
-node memory/cortex.js track-tokens --agent aegis --input 4000 --output 3000 --cost 0.07 --task testing
+node .oh-my-orq/memory/cortex.js track-tokens --agent aegis --input 4000 --output 3000 --cost 0.07 --task testing
 ```
 
 ---
@@ -85,7 +85,7 @@ Print: `🤖 [AGENT: Cyber] Running OWASP Top 10 security audit...`
   - Dependency vulnerabilities
 
 ```bash
-node memory/cortex.js track-tokens --agent cyber --input 3000 --output 2000 --cost 0.05 --task security
+node .oh-my-orq/memory/cortex.js track-tokens --agent cyber --input 3000 --output 2000 --cost 0.05 --task security
 ```
 
 ---
@@ -93,9 +93,9 @@ node memory/cortex.js track-tokens --agent cyber --input 3000 --output 2000 --co
 ## Step 5 — Finalize
 
 ```bash
-node memory/cortex.js save "Review: <key findings and fixes applied>" --type lesson
-node memory/cortex.js end-session
-node memory/cortex.js tokens
+node .oh-my-orq/memory/cortex.js save "Review: <key findings and fixes applied>" --type lesson
+node .oh-my-orq/memory/cortex.js end-session
+node .oh-my-orq/memory/cortex.js tokens
 ```
 
 Present the review results to the user with:

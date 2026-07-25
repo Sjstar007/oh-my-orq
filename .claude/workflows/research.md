@@ -11,8 +11,8 @@ Run multi-tier research and competitive analysis using specialized data & resear
 ## Step 0 — Harness & Memory Setup
 
 ```bash
-node memory/cortex.js start-session "Multi-Tier Research Pipeline"
-node memory/cortex.js recall "<research topic keywords>"
+node .oh-my-orq/memory/cortex.js start-session "Multi-Tier Research Pipeline"
+node .oh-my-orq/memory/cortex.js recall "<research topic keywords>"
 ```
 
 ---
@@ -26,7 +26,7 @@ Print: `🤖 [AGENT: Spark] Gathering baseline data, metrics, and initial facts.
 - Collect initial statistics, raw facts, and data points
 
 ```bash
-node memory/cortex.js track-tokens --agent spark --input 2000 --output 1500 --cost 0.02 --task research
+node .oh-my-orq/memory/cortex.js track-tokens --agent spark --input 2000 --output 1500 --cost 0.02 --task research
 ```
 
 ---
@@ -41,8 +41,8 @@ Print: `🤖 [AGENT: Intel] Analyzing market standards & competitor multi-repo p
 - Compare alternatives, evaluate trade-offs, and synthesize quantitative insights
 
 ```bash
-node memory/cortex.js track-tokens --agent sigma --input 4000 --output 3000 --cost 0.06 --task research
-node memory/cortex.js track-tokens --agent intel --input 3000 --output 2000 --cost 0.04 --task research
+node .oh-my-orq/memory/cortex.js track-tokens --agent sigma --input 4000 --output 3000 --cost 0.06 --task research
+node .oh-my-orq/memory/cortex.js track-tokens --agent intel --input 3000 --output 2000 --cost 0.04 --task research
 ```
 
 ---
@@ -61,10 +61,10 @@ Print: `🤖 [AGENT: Veritas] Verifying documentation, technical references & ci
   - References & Citations
 
 ```bash
-node memory/cortex.js track-tokens --agent orion --input 6000 --output 5000 --cost 0.12 --task research
-node memory/cortex.js track-tokens --agent veritas --input 2500 --output 1800 --cost 0.035 --task research
-node memory/cortex.js save "Research report completed: <topic>" --type pattern
-node memory/cortex.js end-session
-node memory/cortex.js tokens
+node .oh-my-orq/memory/cortex.js track-tokens --agent orion --input 6000 --output 5000 --cost 0.12 --task research
+node .oh-my-orq/memory/cortex.js track-tokens --agent veritas --input 2500 --output 1800 --cost 0.035 --task research
+node .oh-my-orq/memory/cortex.js save "Research report completed: <topic>" --type pattern
+node .oh-my-orq/memory/cortex.js end-session
+node .oh-my-orq/memory/cortex.js tokens
 node cli/orq.js dashboard
 ```
