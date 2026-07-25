@@ -53,7 +53,7 @@ dirs.forEach(dir => {
 // Copy full app framework to ~/.oh-my-orq/app
 copyDirSync(sourceDir, orqAppDir);
 
-// Copy skills to Antigravity IDE directory
+const isProjectInstall = process.argv.includes('--project');
 const skillsSource = path.join(sourceDir, 'skills');
 const skillsDest = path.join(antigravityHome, 'skills');
 
@@ -69,6 +69,19 @@ if (fs.existsSync(skillsSource)) {
     }
   }
   console.log(`  ✓ Installed ${installed} agent skills to ${skillsDest}`);
+
+  if (isProjectInstall) {
+    const projectSkillsDest = path.join(process.cwd(), '.agents', 'skills');
+    fs.mkdirSync(projectSkillsDest, { recursive: true });
+    for (const skill of skills) {
+      const src = path.join(skillsSource, skill);
+      const dest = path.join(projectSkillsDest, skill);
+      if (fs.statSync(src).isDirectory()) {
+        copyDirSync(src, dest);
+      }
+    }
+    console.log(`  ✓ Installed ${installed} agent skills into project workspace (.agents/skills)`);
+  }
 }
 
 // Copy workflows to Antigravity IDE directory

@@ -10,33 +10,14 @@
 // DATA LOADING
 // ============================================
 
-const SAMPLE_DATA = {
-  tokenUsage: [
-    { agent_name: "apex-1", model_name: "claude-opus-4.8", provider: "anthropic", input_tokens: 3200, output_tokens: 2800, cost_usd: 0.086, task_type: "orchestration", timestamp: new Date(Date.now() - 6 * 86400000).toISOString(), cached_tokens: 0 },
-    { agent_name: "atlas", model_name: "claude-opus-4.8", provider: "anthropic", input_tokens: 5500, output_tokens: 4200, cost_usd: 0.1325, task_type: "architecture", timestamp: new Date(Date.now() - 5 * 86400000).toISOString(), cached_tokens: 500 },
-    { agent_name: "vector", model_name: "claude-sonnet-5", provider: "anthropic", input_tokens: 4000, output_tokens: 6500, cost_usd: 0.1095, task_type: "planning", timestamp: new Date(Date.now() - 5 * 86400000).toISOString(), cached_tokens: 0 },
-    { agent_name: "forge", model_name: "claude-sonnet-5", provider: "anthropic", input_tokens: 8000, output_tokens: 12000, cost_usd: 0.204, task_type: "implementation", timestamp: new Date(Date.now() - 4 * 86400000).toISOString(), cached_tokens: 1200 },
-    { agent_name: "nova", model_name: "gemini-2.5-pro", provider: "google", input_tokens: 6000, output_tokens: 9500, cost_usd: 0.1025, task_type: "frontend", timestamp: new Date(Date.now() - 4 * 86400000).toISOString(), cached_tokens: 800 },
-    { agent_name: "aegis", model_name: "gpt-5.6-sol", provider: "openai", input_tokens: 4500, output_tokens: 7000, cost_usd: 0.2325, task_type: "testing", timestamp: new Date(Date.now() - 3 * 86400000).toISOString(), cached_tokens: 0 },
-    { agent_name: "forge", model_name: "claude-opus-4.8", provider: "anthropic", input_tokens: 7000, output_tokens: 5500, cost_usd: 0.1725, task_type: "backend-complex", timestamp: new Date(Date.now() - 3 * 86400000).toISOString(), cached_tokens: 2000 },
-    { agent_name: "viper", model_name: "claude-sonnet-5", provider: "anthropic", input_tokens: 3000, output_tokens: 4500, cost_usd: 0.0765, task_type: "debugging", timestamp: new Date(Date.now() - 2 * 86400000).toISOString(), cached_tokens: 0 },
-    { agent_name: "veritas", model_name: "claude-haiku-4.5", provider: "anthropic", input_tokens: 2000, output_tokens: 1500, cost_usd: 0.0095, task_type: "research", timestamp: new Date(Date.now() - 2 * 86400000).toISOString(), cached_tokens: 500 },
-    { agent_name: "nova", model_name: "gemini-2.5-flash", provider: "google", input_tokens: 5000, output_tokens: 8000, cost_usd: 0.0215, task_type: "frontend", timestamp: new Date(Date.now() - 1 * 86400000).toISOString(), cached_tokens: 1000 },
-    { agent_name: "quill", model_name: "claude-sonnet-5", provider: "anthropic", input_tokens: 3500, output_tokens: 5500, cost_usd: 0.093, task_type: "documentation", timestamp: new Date(Date.now() - 1 * 86400000).toISOString(), cached_tokens: 0 },
-    { agent_name: "cyber", model_name: "claude-opus-4.8", provider: "anthropic", input_tokens: 6000, output_tokens: 3800, cost_usd: 0.125, task_type: "security", timestamp: new Date().toISOString(), cached_tokens: 1500 },
-    { agent_name: "sync", model_name: "gemini-2.5-flash", provider: "google", input_tokens: 1500, output_tokens: 800, cost_usd: 0.00245, task_type: "git", timestamp: new Date().toISOString(), cached_tokens: 300 },
-    { agent_name: "matrix", model_name: "claude-opus-4.8", provider: "anthropic", input_tokens: 4000, output_tokens: 5200, cost_usd: 0.15, task_type: "deployment", timestamp: new Date().toISOString(), cached_tokens: 0 }
-  ],
-  sessions: [
-    { id: "s1", task_description: "Build e-commerce platform", status: "completed", total_tokens: 45000, total_cost: 0.85 },
-    { id: "s2", task_description: "Add authentication system", status: "completed", total_tokens: 32000, total_cost: 0.62 },
-    { id: "s3", task_description: "Write test suite", status: "active", total_tokens: 15000, total_cost: 0.28 }
-  ],
-  cacheStats: { totalEntries: 8, totalHits: 24, totalTokensCached: 7800 }
+const EMPTY_DATA = {
+  tokenUsage: [],
+  sessions: [],
+  cacheStats: { totalEntries: 0, totalHits: 0, totalTokensCached: 0 }
 };
 
 let pricingData = {};
-let usageData = SAMPLE_DATA;
+let usageData = EMPTY_DATA;
 let budget = parseFloat(localStorage.getItem('oh-my-orq-budget') || '50');
 
 // ============================================
@@ -53,15 +34,24 @@ async function init() {
     pricingData = getDefaultPricing();
   }
 
-  // Try to load real usage data
+  // Try to load real usage data from usage-data.json or localStorage
   try {
     const resp = await fetch('data/usage-data.json');
-    const real = await resp.json();
-    if (real.tokenUsage && real.tokenUsage.length > 0) {
-      usageData = real;
+    if (resp.ok) {
+      const real = await resp.json();
+      if (real && (real.tokenUsage || real.usage)) {
+        usageData = {
+          tokenUsage: real.tokenUsage || real.usage || [],
+          sessions: real.sessions || [],
+          cacheStats: real.cacheStats || { totalEntries: 0, totalHits: 0, totalTokensCached: 0 }
+        };
+      }
     }
   } catch (e) {
-    console.info('Using sample data. Export from Cortex to see real data.');
+    const localSaved = localStorage.getItem('oh-my-orq-usage-data');
+    if (localSaved) {
+      try { usageData = JSON.parse(localSaved); } catch (err) {}
+    }
   }
 
   renderSummaryCards();
