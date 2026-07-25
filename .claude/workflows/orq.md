@@ -6,7 +6,26 @@ description: "Master oh-my-orq autonomous execution — orchestrates planning, i
 
 Execute complete multi-agent orchestration for the user's prompt using **Apex-1** and specialized subagents.
 
-> **IMPORTANT**: This workflow integrates shared memory, token tracking, and agent harness. Follow EVERY step exactly — do NOT skip the `run_command` steps.
+> **IMPORTANT**: This workflow integrates shared memory, token tracking, token optimization, and agent harness. Follow EVERY step exactly — do NOT skip any harness commands.
+
+## ⚙️ Mandatory Autonomous Framework Harness
+
+During execution of this workflow, the following 3 core framework sub-systems **MUST automatically operate**:
+
+1. 🗜️ **Token Optimization Engine (`token-optimization/`)**:
+   - **Delta Mode (`delta-mode.js`)**: File re-reads automatically generate unified diffs (saving 85–95% tokens).
+   - **Code Skeletons (`skeletons.js`)**: Large code files return AST-style structural summaries.
+   - **Output Compression (`output-compressor.js`)**: Command & test logs are automatically condensed.
+   - **Progressive Disclosure (`archive-store.js`)**: Outputs > 4KB are archived to disk with retrieval pointers.
+
+2. 🧠 **Project Cortex Shared Memory (`memory/cortex.js`)**:
+   - **Session Lifecycle**: `start-session` initializes tracking, `recall` retrieves past decisions, `save` records new learnings, and `end-session` closes tracking.
+
+3. 🪝 **Hooks Engine (`hooks/`)**:
+   - **PreToolUse**: Intercepts tool calls to inject recalled memories and apply prompt compression.
+   - **PostToolUse**: Auto-captures token metrics per agent and updates the live web dashboard.
+
+---
 
 ## Step 0 — Initialize Session & Recall Memory
 
