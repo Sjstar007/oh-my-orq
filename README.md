@@ -102,6 +102,27 @@
 | **Vision** | Visual Analysis Expert | `Claude Opus 4.8` | UI screenshot reviews, diagram parsing, OCR text extraction |
 | **Orq-01** | Framework Demo Agent | `Claude Haiku 4.5` | Framework tutorials, installation verification & examples |
 
+## 🚀 Quick Start & Installation
+
+```bash
+# Global Installation (Required)
+npm i -g oh-my-orq
+
+# Instant Setup via NPX
+npx oh-my-orq
+```
+
+## 💬 IDE Slash Commands & Multi-Agent Orchestration
+
+Simply type any of these slash commands in your IDE chat (Antigravity, Cursor, VS Code):
+
+| Slash Command | Orchestrator Agent | Action / Execution Flow |
+| :--- | :--- | :--- |
+| **`/orq <prompt>`** | **Apex-1** | Full autonomous execution pipeline (`/orq-plan` → `/orq-implement` → `/orq-review`) |
+| **`/orq-plan <prompt>`** | **Apex-1** → Vector, Aura, Atlas, Nexus | Strategic 3–7 stage planning, architectural review & API spec design |
+| **`/orq-implement <prompt>`** | **Apex-1** → Forge, Nova, Link, Sync | Backend logic, frontend UI/UX, MCP integration & git commits |
+| **`/orq-review <prompt>`** | **Apex-1** → Prism, Pulse, Aegis, Cyber | Code quality refactoring, profiling, automated testing & OWASP audit |
+
 ---
 
 ## 📦 Agent Installation Commands
@@ -118,9 +139,6 @@ orq install apex-1
 
 # Install Master Orchestrator into Current Project (.agents/skills)
 orq install apex-1 --project
-
-# Install specific specialist agent
-orq install forge --project
 ```
 
 ## 📋 CLI Commands

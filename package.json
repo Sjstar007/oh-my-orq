@@ -1,6 +1,6 @@
 {
   "name": "oh-my-orq",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "description": "Multi-agent orchestration framework for AI-powered application generation — 28 specialized agents with shared memory, token optimization, and usage dashboard",
   "main": "cli/install.js",
   "bin": {

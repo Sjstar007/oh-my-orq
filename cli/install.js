@@ -21,6 +21,15 @@ console.log(`
   ⚡ Multi-Agent Orchestration Framework
 `);
 
+// Enforce global installation check
+const isGlobalInstall = process.env.npm_config_global === 'true' || process.argv.includes('--global') || process.argv.includes('-g') || process.argv.includes('--project');
+if (process.env.npm_lifecycle_event === 'postinstall' && !isGlobalInstall) {
+  console.error(`\n❌ ERROR: Local installation of oh-my-orq without -g is disabled.`);
+  console.error(`👉 Please install oh-my-orq globally:\n`);
+  console.error(`   npm i -g oh-my-orq\n`);
+  process.exit(1);
+}
+
 const homeDir = os.homedir();
 const orqHome = path.join(homeDir, '.oh-my-orq');
 const orqAppDir = path.join(orqHome, 'app');
@@ -48,7 +57,22 @@ async function promptProjectInstall() {
 }
 
 async function main() {
-  console.log('Installing Oh My Orq...\n');
+  console.log('Installing Oh My Orq across IDEs (Antigravity, Cursor, VS Code, Claude Code)...\n');
+
+  // IDE Target Directories
+  const ideSkillTargets = [
+    path.join(homeDir, '.gemini', 'antigravity', 'skills'),
+    path.join(homeDir, '.cursor', 'skills'),
+    path.join(homeDir, '.claude', 'skills'),
+    path.join(homeDir, '.agents', 'skills'),
+  ];
+
+  const ideWorkflowTargets = [
+    path.join(homeDir, '.gemini', 'antigravity', 'workflows'),
+    path.join(homeDir, '.cursor', 'workflows'),
+    path.join(homeDir, '.claude', 'workflows'),
+    path.join(homeDir, '.agents', 'workflows'),
+  ];
 
   // Directories to create
   const dirs = [
@@ -58,8 +82,8 @@ async function main() {
     path.join(orqHome, 'memory'),
     path.join(orqHome, 'cache'),
     path.join(orqHome, 'sessions'),
-    path.join(antigravityHome, 'skills'),
-    path.join(antigravityHome, 'workflows'),
+    ...ideSkillTargets,
+    ...ideWorkflowTargets,
   ];
 
   // Create directories
@@ -75,44 +99,79 @@ async function main() {
   // Check interactive project prompt
   const shouldInstallProject = await promptProjectInstall();
 
-  // Install skills
+  // Install skills across all IDE target locations
   if (fs.existsSync(skillsSource)) {
     const skills = fs.readdirSync(skillsSource);
-    let installed = 0;
+    let installedCount = 0;
     for (const skill of skills) {
       const src = path.join(skillsSource, skill);
-      const dest = path.join(skillsDest, skill);
       if (fs.statSync(src).isDirectory()) {
-        copyDirSync(src, dest);
-        installed++;
+        for (const targetDir of ideSkillTargets) {
+          copyDirSync(src, path.join(targetDir, skill));
+        }
+        installedCount++;
       }
     }
-    console.log(`  ✓ Installed ${installed} agent skills to ${skillsDest}`);
+    console.log(`  ✓ Installed ${installedCount} agent skills to Antigravity, Cursor, VS Code & Claude Code`);
 
     if (shouldInstallProject) {
-      const projectSkillsDest = path.join(process.cwd(), '.agents', 'skills');
-      fs.mkdirSync(projectSkillsDest, { recursive: true });
-      for (const skill of skills) {
-        const src = path.join(skillsSource, skill);
-        const dest = path.join(projectSkillsDest, skill);
-        if (fs.statSync(src).isDirectory()) {
-          copyDirSync(src, dest);
+      const projectTargets = [
+        path.join(process.cwd(), '.agents', 'skills'),
+        path.join(process.cwd(), '.cursor', 'skills'),
+        path.join(process.cwd(), '.claude', 'skills'),
+      ];
+      for (const pTarget of projectTargets) {
+        fs.mkdirSync(pTarget, { recursive: true });
+        for (const skill of skills) {
+          const src = path.join(skillsSource, skill);
+          if (fs.statSync(src).isDirectory()) {
+            copyDirSync(src, path.join(pTarget, skill));
+          }
         }
       }
-      console.log(`  ✓ Installed ${installed} agent skills into project workspace (.agents/skills)`);
+
+      // Copy project-scoped workflows
+      const projectWfTargets = [
+        path.join(process.cwd(), '.agents', 'workflows'),
+        path.join(process.cwd(), '.cursor', 'workflows'),
+        path.join(process.cwd(), '.claude', 'workflows'),
+      ];
+      const workflowsSource = path.join(sourceDir, 'workflows');
+      if (fs.existsSync(workflowsSource)) {
+        const workflows = fs.readdirSync(workflowsSource).filter(f => f.endsWith('.md'));
+        for (const pTarget of projectWfTargets) {
+          fs.mkdirSync(pTarget, { recursive: true });
+          for (const wf of workflows) {
+            fs.copyFileSync(path.join(workflowsSource, wf), path.join(pTarget, wf));
+          }
+        }
+      }
+
+      // Copy framework sub-systems (memory, token-optimization, delegation, subagents, dashboard)
+      const subsystems = ['memory', 'token-optimization', 'delegation', 'subagents', 'dashboard'];
+      const projectOrqHome = path.join(process.cwd(), '.oh-my-orq');
+      for (const sys of subsystems) {
+        const srcSys = path.join(sourceDir, sys);
+        if (fs.existsSync(srcSys)) {
+          const destSys = sys === 'dashboard' ? path.join(process.cwd(), 'dashboard') : path.join(projectOrqHome, sys);
+          copyDirSync(srcSys, destSys);
+        }
+      }
+
+      console.log(`  ✓ Installed ALL agent skills, workflows, memory, harness & dashboard into project workspace!`);
     }
   }
 
-  // Copy workflows
+  // Copy workflows across all IDE target locations
   const workflowsSource = path.join(sourceDir, 'workflows');
-  const workflowsDest = path.join(antigravityHome, 'workflows');
-
   if (fs.existsSync(workflowsSource)) {
     const workflows = fs.readdirSync(workflowsSource).filter(f => f.endsWith('.md'));
     for (const wf of workflows) {
-      fs.copyFileSync(path.join(workflowsSource, wf), path.join(workflowsDest, wf));
+      for (const targetDir of ideWorkflowTargets) {
+        fs.copyFileSync(path.join(workflowsSource, wf), path.join(targetDir, wf));
+      }
     }
-    console.log(`  ✓ Installed ${workflows.length} workflows to ${workflowsDest}`);
+    console.log(`  ✓ Installed ${workflows.length} slash command workflows across IDE target locations`);
   }
 
   // Create binary script in ~/.oh-my-orq/bin/orq
@@ -152,13 +211,13 @@ async function main() {
 
   // Save installation info
   const installInfo = {
-    version: require(path.join(sourceDir, 'package.json')).version || '1.0.6',
+    version: require(path.join(sourceDir, 'package.json')).version || '1.0.7',
     installedAt: new Date().toISOString(),
     homeDir: orqHome,
     appDir: orqAppDir,
     binDir: orqBinDir,
-    skillsDir: skillsDest,
-    workflowsDir: workflowsDest,
+    skillsDirs: ideSkillTargets,
+    workflowsDirs: ideWorkflowTargets,
     platform: os.platform(),
     arch: os.arch()
   };
@@ -168,11 +227,10 @@ async function main() {
     JSON.stringify(installInfo, null, 2)
   );
 
-  console.log(`\n🎉 Oh My Orq installed successfully!\n`);
-  console.log(`  Skills:    ${skillsDest}`);
-  console.log(`  Workflows: ${workflowsDest}`);
-  console.log(`  Memory:    ${path.join(orqHome, 'memory')}`);
-  console.log(`  App Home:  ${orqAppDir}\n`);
+  console.log(`\n🎉 Oh My Orq installed successfully across all IDEs!\n`);
+  console.log(`  IDEs Supported: Antigravity, Cursor, VS Code & Claude Code`);
+  console.log(`  Memory:         ${path.join(orqHome, 'memory')}`);
+  console.log(`  App Home:       ${orqAppDir}\n`);
 
   console.log(`💡 Usage Commands:`);
   console.log(`  npm i -g oh-my-orq           Global installation`);

@@ -158,6 +158,19 @@ class MemoryStore {
     return usage;
   }
 
+  trackTokens(record) {
+    return this.trackTokenUsage({
+      agent: record.agent_name || record.agent,
+      model: record.model_name || record.model,
+      provider: record.provider,
+      inputTokens: record.input_tokens || record.inputTokens,
+      outputTokens: record.output_tokens || record.outputTokens,
+      cost: record.cost_usd || record.cost,
+      taskType: record.task_type || record.taskType,
+      sessionId: record.session_id || record.sessionId
+    });
+  }
+
   getTokenUsage(options = {}) {
     let usage = this.data.token_usage;
 
@@ -414,9 +427,41 @@ function main() {
       break;
     }
 
+    case 'track-tokens':
+    case 'log-tokens': {
+      const agentIdx = args.indexOf('--agent');
+      const modelIdx = args.indexOf('--model');
+      const providerIdx = args.indexOf('--provider');
+      const inputIdx = args.indexOf('--input');
+      const outputIdx = args.indexOf('--output');
+      const costIdx = args.indexOf('--cost');
+      const taskIdx = args.indexOf('--task');
+
+      const record = store.trackTokens({
+        agent_name: agentIdx > -1 ? args[agentIdx + 1] : 'apex-1',
+        model_name: modelIdx > -1 ? args[modelIdx + 1] : 'claude-opus-4.8',
+        provider: providerIdx > -1 ? args[providerIdx + 1] : 'anthropic',
+        input_tokens: inputIdx > -1 ? parseInt(args[inputIdx + 1], 10) : 1000,
+        output_tokens: outputIdx > -1 ? parseInt(args[outputIdx + 1], 10) : 500,
+        cost_usd: costIdx > -1 ? parseFloat(args[costIdx + 1]) : 0.02,
+        task_type: taskIdx > -1 ? args[taskIdx + 1] : 'task',
+        timestamp: new Date().toISOString()
+      });
+
+      // Auto export to dashboard data JSON file
+      const exportPath = path.join(__dirname, '..', 'dashboard', 'data', 'usage-data.json');
+      try {
+        fs.mkdirSync(path.dirname(exportPath), { recursive: true });
+        fs.writeFileSync(exportPath, JSON.stringify(store.exportForDashboard(), null, 2));
+      } catch (e) {}
+
+      console.log(`✅ Logged ${record.input_tokens + record.output_tokens} tokens for agent "${record.agent_name}"`);
+      break;
+    }
+
     case 'export': {
       const exported = store.exportForDashboard();
-      const exportPath = args[1] || path.join(process.cwd(), 'dashboard', 'data', 'usage-data.json');
+      const exportPath = args[1] || path.join(__dirname, '..', 'dashboard', 'data', 'usage-data.json');
       fs.mkdirSync(path.dirname(exportPath), { recursive: true });
       fs.writeFileSync(exportPath, JSON.stringify(exported, null, 2));
       console.log(`📤 Dashboard data exported to: ${exportPath}`);

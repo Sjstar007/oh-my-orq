@@ -161,7 +161,25 @@ function installAgent(name, projectScope) {
       copyDirSync(src, dest);
       count++;
     }
-    console.log(`✅ Installed all ${count} agents to ${projectScope ? './.agents/skills' : skillsDir}`);
+
+    if (projectScope) {
+      const appSource = path.join(__dirname, '..');
+      const subsystems = ['workflows', 'memory', 'token-optimization', 'delegation', 'subagents', 'dashboard'];
+      for (const sys of subsystems) {
+        const srcSys = path.join(appSource, sys);
+        if (fs.existsSync(srcSys)) {
+          const destSys = sys === 'workflows' 
+            ? path.join(process.cwd(), '.agents', 'workflows')
+            : sys === 'dashboard'
+            ? path.join(process.cwd(), 'dashboard')
+            : path.join(process.cwd(), '.oh-my-orq', sys);
+          copyDirSync(srcSys, destSys);
+        }
+      }
+      console.log(`✅ Installed all ${count} agents, workflows, memory, harness, & dashboard to current project workspace!`);
+    } else {
+      console.log(`✅ Installed all ${count} agents to ${skillsDir}`);
+    }
     return;
   }
 
