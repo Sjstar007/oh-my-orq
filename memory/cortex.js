@@ -442,7 +442,7 @@ function main() {
 
       // Test token tracking
       store.trackTokenUsage({
-        agent: 'oracle',
+        agent: 'atlas',
         model: 'claude-opus-4.8',
         provider: 'anthropic',
         inputTokens: 2500,
@@ -451,7 +451,7 @@ function main() {
         taskType: 'architecture'
       });
       store.trackTokenUsage({
-        agent: 'codesmith',
+        agent: 'forge',
         model: 'claude-sonnet-5',
         provider: 'anthropic',
         inputTokens: 4000,
@@ -460,7 +460,7 @@ function main() {
         taskType: 'implementation'
       });
       store.trackTokenUsage({
-        agent: 'pixel',
+        agent: 'nova',
         model: 'gemini-2.5-pro',
         provider: 'google',
         inputTokens: 3000,
@@ -475,8 +475,8 @@ function main() {
       console.log(`  ✅ Summary: ${summary.total.input + summary.total.output} total tokens, $${summary.total.cost.toFixed(4)}`);
 
       // Test prompt cache
-      const cache1 = store.cachePrompt('You are Oracle, the System Architect...', 'oracle');
-      const cache2 = store.cachePrompt('You are Oracle, the System Architect...', 'oracle');
+      const cache1 = store.cachePrompt('You are Oracle, the System Architect...', 'atlas');
+      const cache2 = store.cachePrompt('You are Oracle, the System Architect...', 'atlas');
       console.log(`  ✅ Prompt cache: miss=${!cache1.cached}, hit=${cache2.cached}`);
 
       // Test export

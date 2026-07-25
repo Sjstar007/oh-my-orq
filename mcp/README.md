@@ -22,9 +22,9 @@ Oh My Orq includes pre-configured settings for standard MCP servers in `mcp/mcp_
 
 2. Add your API tokens (e.g. `GITHUB_PERSONAL_ACCESS_TOKEN` or `BRAVE_API_KEY`).
 
-3. Use **`mcp-master`** agent to orchestrate MCP calls:
+3. Use **`link`** agent to orchestrate MCP calls:
    ```bash
-   orq spawn mcp-master "Create Pull Request on GitHub repo myorg/myapp"
+   orq spawn link "Create Pull Request on GitHub repo myorg/myapp"
    ```
 
 ## 🛠️ Adding Custom MCP Servers

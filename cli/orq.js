@@ -108,13 +108,13 @@ function listAgents() {
   });
 
   const categories = {
-    'Orchestration': ['sisyphus', 'prometheus', 'metis'],
-    'Architecture': ['oracle', 'architect', 'strategist'],
-    'Development': ['codesmith', 'pixel', 'refactorer', 'performance-expert'],
-    'Testing': ['tester', 'qa-engineer', 'security-guard'],
-    'Research': ['librarian', 'explorer', 'scribe', 'researcher'],
-    'Data': ['scientist-low', 'scientist', 'scientist-high', 'data-wizard', 'sql-master'],
-    'Tools, Messaging & MCP': ['debugger', 'git-master', 'mcp-master', 'hermes', 'devops-engineer', 'playwright-master', 'multimodal-looker', 'hello-oh-my-orq']
+    'Orchestration': ['apex-1', 'vector', 'aura'],
+    'Architecture': ['atlas', 'nexus', 'lexicon'],
+    'Development': ['forge', 'nova', 'prism', 'pulse'],
+    'Testing': ['aegis', 'echo', 'cyber'],
+    'Research': ['veritas', 'tracker', 'quill', 'intel'],
+    'Data': ['spark', 'sigma', 'orion', 'flow', 'query'],
+    'Tools, Messaging & MCP': ['viper', 'sync', 'link', 'hermes', 'matrix', 'automata', 'vision', 'hello-oh-my-orq']
   };
 
   for (const [cat, catAgents] of Object.entries(categories)) {

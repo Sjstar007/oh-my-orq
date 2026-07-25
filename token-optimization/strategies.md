@@ -68,13 +68,13 @@ Cache key = hash(agent_name + prompt). TTL = 24 hours default.
 Set per-agent token budgets:
 ```json
 {
-  "sisyphus": 50000,
-  "oracle": 30000,
-  "codesmith": 100000,
-  "pixel": 80000,
-  "tester": 40000,
-  "librarian": 10000,
-  "git-master": 5000
+  "apex-1": 50000,
+  "atlas": 30000,
+  "forge": 100000,
+  "nova": 80000,
+  "aegis": 40000,
+  "veritas": 10000,
+  "sync": 5000
 }
 ```
 

@@ -132,7 +132,7 @@ orq dashboard                    # Open web dashboard
 
 ## 🔌 Model Context Protocol (MCP)
 
-AgentForge includes native MCP support via the **`mcp-master`** agent and `mcp/mcp_config.json`:
+AgentForge includes native MCP support via the **`link`** agent and `mcp/mcp_config.json`:
 - **GitHub MCP**: Pull requests, issue management, code tree search
 - **Postgres MCP**: Schema inspection and parameterized database queries
 - **Filesystem MCP**: Local storage navigation

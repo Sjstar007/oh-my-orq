@@ -171,6 +171,6 @@ module.exports = LearningEngine;
 if (require.main === module) {
   const engine = new LearningEngine();
   engine.analyzeCodebase();
-  engine.captureLearning('Fix uncaught promise rejection in API', 'Wrap async handlers in try-catch block and return 500 status', 'codesmith');
+  engine.captureLearning('Fix uncaught promise rejection in API', 'Wrap async handlers in try-catch block and return 500 status', 'forge');
   console.log(engine.getLearningContextPrompt());
 }

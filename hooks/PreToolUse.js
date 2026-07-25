@@ -93,7 +93,7 @@ module.exports = { onPreToolUse, deltaEngine, archiveStore, loopDetector };
 
 if (require.main === module) {
   const res = onPreToolUse({
-    agentName: 'codesmith',
+    agentName: 'forge',
     taskDescription: 'Implement user login endpoint',
     toolName: 'view_file',
     toolParams: { AbsolutePath: '/Users/shubhamjangid/workspace/agent/cli/orq.js' },

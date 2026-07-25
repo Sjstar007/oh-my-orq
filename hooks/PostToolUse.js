@@ -50,7 +50,7 @@ module.exports = { onPostToolUse };
 if (require.main === module) {
   const res = onPostToolUse({
     sessionId: 'test-session-123',
-    agentName: 'codesmith',
+    agentName: 'forge',
     modelName: 'claude-sonnet-5',
     provider: 'anthropic',
     inputTokens: 1500,

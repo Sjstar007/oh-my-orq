@@ -36,7 +36,7 @@ OUTPUT: <expected format>
 
 ### Example
 ```
-[DELEGATE TO: oracle]
+[DELEGATE TO: atlas]
 TASK: Design authentication system architecture
 CONTEXT:
 - E-commerce platform
@@ -82,19 +82,19 @@ Each specialist does NOT receive:
 
 ### Sequential Delegation
 ```
-Round 1: [DELEGATE TO: oracle] → Architecture
-Round 2: [DELEGATE TO: architect] → Schema (uses architecture)
-Round 3: [DELEGATE TO: codesmith] → Implementation (uses architecture + schema)
-Round 4: [DELEGATE TO: tester] → Tests (uses implementation)
-Round 5: [DELEGATE TO: scribe] → Docs (uses all)
+Round 1: [DELEGATE TO: atlas] → Architecture
+Round 2: [DELEGATE TO: nexus] → Schema (uses architecture)
+Round 3: [DELEGATE TO: forge] → Implementation (uses architecture + schema)
+Round 4: [DELEGATE TO: aegis] → Tests (uses implementation)
+Round 5: [DELEGATE TO: quill] → Docs (uses all)
 ```
 
 ### Parallel Delegation
 ```
 [PARALLEL START]
-  ├─→ pixel: Build frontend UI
-  ├─→ codesmith: Build backend API
-  └─→ architect: Design database schema
+  ├─→ nova: Build frontend UI
+  ├─→ forge: Build backend API
+  └─→ nexus: Design database schema
 [PARALLEL END]
 Wait for all → Integrate → Deliver
 ```
@@ -103,5 +103,5 @@ Wait for all → Integrate → Deliver
 ```
 IF specialist reports insufficient capability:
   ESCALATE to higher-tier model
-  Example: codesmith (Sonnet) → codesmith-complex (Opus)
+  Example: forge (Sonnet) → forge-complex (Opus)
 ```

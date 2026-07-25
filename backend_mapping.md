@@ -54,7 +54,7 @@
 #### 1. Prometheus (Planner)
 ```json
 {
-  "name": "prometheus",
+  "name": "vector",
   "role": "Strategic Planner",
   "ai_backend": {
     "primary": "claude-opus-4.5",
@@ -72,7 +72,7 @@
 #### 2. Oracle (Architect)
 ```json
 {
-  "name": "oracle",
+  "name": "atlas",
   "role": "System Architect",
   "ai_backend": {
     "primary": "codex",
@@ -92,7 +92,7 @@
 #### 3. Pixel (Frontend)
 ```json
 {
-  "name": "pixel",
+  "name": "nova",
   "role": "Frontend Developer & Designer",
   "ai_backend": {
     "primary": "gemini-3.0-pro",
@@ -112,7 +112,7 @@
 #### 4. CodeSmith (Backend)
 ```json
 {
-  "name": "codesmith",
+  "name": "forge",
   "role": "Backend Developer",
   "ai_backend": {
     "primary": "claude-code",
@@ -131,7 +131,7 @@
 **복잡한 백엔드 로직**:
 ```json
 {
-  "name": "codesmith-complex",
+  "name": "forge-complex",
   "ai_backend": {
     "primary": "claude-opus-4.5",
     "reason": "복잡한 백엔드 로직은 Opus가 더 강함"
@@ -150,7 +150,7 @@
 #### 5. Debugger (Bug Hunter)
 ```json
 {
-  "name": "debugger",
+  "name": "viper",
   "role": "Debugging Specialist",
   "ai_backend": {
     "primary": "codex",
@@ -168,7 +168,7 @@
 #### 6. Tester (QA)
 ```json
 {
-  "name": "tester",
+  "name": "aegis",
   "role": "Test Engineer",
   "ai_backend": {
     "primary": "codex",
@@ -199,28 +199,28 @@ User Request: "Build e-commerce platform with React + Node.js"
      ↓
      
 Phase 1: Planning (Sequential)
-├─→ [SPAWN: prometheus via Claude Opus 4.5]
+├─→ [SPAWN: vector via Claude Opus 4.5]
 │   TASK: Write PRD and project plan
 │   OUTPUT: PRD.md, PLAN.md
 │   ↓ 15 minutes
 │   RESULT: ✅ Complete project specification
 │
-└─→ [SPAWN: oracle via Codex]
+└─→ [SPAWN: atlas via Codex]
     TASK: Design system architecture
-    CONTEXT: PRD from prometheus
+    CONTEXT: PRD from vector
     OUTPUT: Architecture diagram, tech stack
     ↓ 20 minutes
     RESULT: ✅ Detailed architecture
 
 Phase 2: Implementation (Parallel)
-├─→ [SPAWN: pixel via Gemini 3.0 Pro]
+├─→ [SPAWN: nova via Gemini 3.0 Pro]
 │   TASK: Implement frontend (React)
 │   CONTEXT: Architecture + PRD
 │   OUTPUT: React components, UI
 │   ↓ 45 minutes
 │   RESULT: ✅ Complete frontend
 │
-└─→ [SPAWN: codesmith via Claude Code]
+└─→ [SPAWN: forge via Claude Code]
     TASK: Implement backend (Node.js)
     CONTEXT: Architecture + PRD
     OUTPUT: API endpoints, business logic
@@ -229,22 +229,22 @@ Phase 2: Implementation (Parallel)
     
     ↓ (Complex logic detected)
     
-    [SPAWN: codesmith-complex via Claude Opus 4.5]
+    [SPAWN: forge-complex via Claude Opus 4.5]
     TASK: Implement payment processing
-    CONTEXT: Backend from codesmith
+    CONTEXT: Backend from forge
     OUTPUT: Payment integration
     ↓ 30 minutes
     RESULT: ✅ Secure payment system
 
 Phase 3: Quality (Sequential)
-├─→ [SPAWN: tester via Codex]
+├─→ [SPAWN: aegis via Codex]
 │   TASK: Write comprehensive tests
 │   CONTEXT: Frontend + Backend
 │   OUTPUT: Test suite (Jest, Playwright)
 │   ↓ 30 minutes
 │   RESULT: ✅ 85% coverage
 │
-└─→ [SPAWN: debugger via Codex]
+└─→ [SPAWN: viper via Codex]
     TASK: Fix failing tests and bugs
     CONTEXT: Test results
     OUTPUT: Bug fixes

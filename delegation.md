@@ -38,7 +38,7 @@ OUTPUT: <expected format>
 ### Example
 
 ```
-[DELEGATE TO: oracle]
+[DELEGATE TO: atlas]
 TASK: Design authentication system architecture
 CONTEXT: 
 - E-commerce platform
@@ -58,22 +58,22 @@ OUTPUT: Architecture diagram + technology choices with rationale
 
 | Skill | Role | Can Delegate To |
 |-------|------|-----------------|
-| **sisyphus** | Master Orchestrator | All specialists |
-| **prometheus** | Strategic Planner | metis, all specialists |
-| **metis** | Plan Validator | None (reviewonly) |
+| **apex-1** | Master Orchestrator | All specialists |
+| **vector** | Strategic Planner | aura, all specialists |
+| **aura** | Plan Validator | None (reviewonly) |
 
 ### Specialists by Domain
 
 #### **Architecture & Design**
-- **oracle** - System architecture, design patterns
+- **atlas** - System architecture, design patterns
   - Accepts: `design`, `architecture`, `review`, `strategy`
   - Model: Claude Opus 4
   
-- **architect** - Database/API schema
+- **nexus** - Database/API schema
   - Accepts: `schema`, `api-design`, `database`
   - Model: Claude Sonnet 3.5
 
-- **strategist** - Technical decisions
+- **lexicon** - Technical decisions
   - Accepts: `decision`, `comparison`, `evaluation`
   - Model: Claude Sonnet 3.5
 
@@ -83,91 +83,91 @@ OUTPUT: Architecture diagram + technology choices with rationale
   - Model: Gemini 3.0 Pro + Stitch Extension
 
 #### **Development**
-- **codesmith** - Backend implementation
+- **forge** - Backend implementation
   - Accepts: `implement`, `code`, `backend`
   - Model: Claude Sonnet 3.5
 
-- **pixel** - UI/UX development
+- **nova** - UI/UX development
   - Accepts: `ui`, `component`, `frontend`, `design`
   - Model: Claude Sonnet 3.5
 
-- **refactorer** - Code improvement
+- **prism** - Code improvement
   - Accepts: `refactor`, `cleanup`, `improve`
   - Model: Claude Sonnet 3.5
 
 #### **Testing & Quality**
-- **tester** - Automated testing
+- **aegis** - Automated testing
   - Accepts: `test`, `unit`, `integration`
   - Model: Claude Sonnet 3.5
 
-- **qa-engineer** - Manual testing
+- **echo** - Manual testing
   - Accepts: `manual-test`, `test-plan`
   - Model: Claude Haiku
 
-- **security-guard** - Security audit
+- **cyber** - Security audit
   - Accepts: `security`, `audit`, `vulnerability`
   - Model: Claude Opus 4
 
 #### **Research & Documentation**
-- **librarian** - Research & examples
+- **veritas** - Research & examples
   - Accepts: `research`, `example`, `documentation`
   - Model: Claude Haiku
 
-- **explorer** - Code navigation
+- **tracker** - Code navigation
   - Accepts: `find`, `search`, `locate`
   - Model: Claude Haiku
 
-- **scribe** - Technical writing
+- **quill** - Technical writing
   - Accepts: `document`, `readme`, `guide`
   - Model: Claude Sonnet 3.5
 
-- **researcher** - Multi-repo analysis
+- **intel** - Multi-repo analysis
   - Accepts: `analyze`, `compare`, `research`
   - Model: Claude Sonnet 3.5
 
 #### **Data & Analysis**
-- **scientist-low** - Quick data exploration
+- **spark** - Quick data exploration
   - Accepts: `data-explore`, `stats`
   - Model: Claude Haiku
 
-- **scientist** - Standard analysis
+- **sigma** - Standard analysis
   - Accepts: `analyze-data`, `statistics`
   - Model: Claude Sonnet 3.5
 
-- **scientist-high** - Advanced research
+- **orion** - Advanced research
   - Accepts: `ml`, `research`, `complex-analysis`
   - Model: Claude Opus 4
 
-- **data-wizard** - ETL pipelines
+- **flow** - ETL pipelines
   - Accepts: `etl`, `pipeline`, `transform`
   - Model: Claude Sonnet 3.5
 
-- **sql-master** - Database queries
+- **query** - Database queries
   - Accepts: `query`, `optimize-sql`
   - Model: Claude Sonnet 3.5
 
 #### **Specialized Tools**
-- **debugger** - Bug fixing
+- **viper** - Bug fixing
   - Accepts: `debug`, `fix`, `troubleshoot`
   - Model: Claude Sonnet 3.5
 
-- **git-master** - Version control
+- **sync** - Version control
   - Accepts: `commit`, `branch`, `git`
   - Model: Claude Haiku
 
-- **devops-engineer** - Deployment
+- **matrix** - Deployment
   - Accepts: `deploy`, `cicd`, `infrastructure`
   - Model: Claude Opus 4
 
-- **performance-expert** - Optimization
+- **pulse** - Optimization
   - Accepts: `optimize`, `performance`, `profile`
   - Model: Claude Opus 4
 
-- **playwright-master** - E2E testing
+- **automata** - E2E testing
   - Accepts: `e2e`, `browser-test`, `automation`
   - Model: Claude Sonnet 3.5
 
-- **multimodal-looker** - Visual analysis
+- **vision** - Visual analysis
   - Accepts: `analyze-image`, `screenshot`, `diagram`
   - Model: Claude Opus 4 (Vision)
 
@@ -188,48 +188,48 @@ Sisyphus analyzes:
 
 ```markdown
 Based on task domains:
-✓ oracle (architecture design)
-✓ security-guard (security requirements)
-✓ architect (database schema)
-✓ codesmith (implementation)
-✓ tester (test suite)
-✓ scribe (documentation)
+✓ atlas (architecture design)
+✓ cyber (security requirements)
+✓ nexus (database schema)
+✓ forge (implementation)
+✓ aegis (test suite)
+✓ quill (documentation)
 ```
 
 ### 3. Sequential Delegation
 
 ```markdown
 Round 1 (Design):
-[DELEGATE TO: oracle]
+[DELEGATE TO: atlas]
 TASK: Design authentication system architecture
 → Returns: Architecture diagram
 
 Round 2 (Security):
-[DELEGATE TO: security-guard]
+[DELEGATE TO: cyber]
 TASK: Define security requirements
 CONTEXT: Architecture from Round 1
 → Returns: Security checklist
 
 Round 3 (Schema):
-[DELEGATE TO: architect]
+[DELEGATE TO: nexus]
 TASK: Design user database schema
 CONTEXT: Architecture + Security requirements
 → Returns: SQL schema
 
 Round 4 (Implementation):
-[DELEGATE TO: codesmith]
+[DELEGATE TO: forge]
 TASK: Implement auth endpoints
 CONTEXT: All previous outputs
 → Returns: Working code
 
 Round 5 (Testing):
-[DELEGATE TO: tester]
+[DELEGATE TO: aegis]
 TASK: Write comprehensive tests
 CONTEXT: Implementation
 → Returns: Test suite
 
 Round 6 (Documentation):
-[DELEGATE TO: scribe]
+[DELEGATE TO: quill]
 TASK: Document API
 CONTEXT: Implementation + Tests
 → Returns: API docs
@@ -239,12 +239,12 @@ CONTEXT: Implementation + Tests
 
 ```markdown
 Sisyphus combines all results:
-- Architecture (from oracle)
-- Security checklist (from security-guard)
-- Database schema (from architect)
-- Implementation (from codesmith)
-- Tests (from tester)
-- Documentation (from scribe)
+- Architecture (from atlas)
+- Security checklist (from cyber)
+- Database schema (from nexus)
+- Implementation (from forge)
+- Tests (from aegis)
+- Documentation (from quill)
 
 → Delivers complete authentication system
 ```
@@ -259,9 +259,9 @@ User: "Optimize application performance"
 Sisyphus delegates in parallel:
 
 [PARALLEL START]
-  ├─→ performance-expert: Profile CPU/memory
-  ├─→ sql-master: Optimize database queries
-  └─→ pixel: Optimize frontend assets
+  ├─→ pulse: Profile CPU/memory
+  ├─→ query: Optimize database queries
+  └─→ nova: Optimize frontend assets
 [PARALLEL END]
 
 Wait for all results → Integrate → Report
@@ -288,7 +288,7 @@ This ensures **focused execution** without distraction.
 ## 📝 Result Format
 
 ```markdown
-[RESULT FROM: oracle]
+[RESULT FROM: atlas]
 STATUS: Complete
 DELIVERABLE:
 # Authentication System Architecture
@@ -312,8 +312,8 @@ RATIONALE:
 - Redis for fast token invalidation
 
 NEXT STEPS:
-- Implement schema (→ architect)
-- Define security policies (→ security-guard)
+- Implement schema (→ nexus)
+- Define security policies (→ cyber)
 [END RESULT]
 ```
 

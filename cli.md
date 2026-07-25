@@ -26,20 +26,20 @@ Already installed with Antigravity IDE
 
 ```powershell
 # Oracle (Codex로 아키텍처 설계)
-.\bin\oma-spawn.ps1 oracle "Design authentication system" `
+.\bin\oma-spawn.ps1 atlas "Design authentication system" `
     -Context "E-commerce, 100k users" `
     -AiBackend "codex"
 
 # Pixel (Gemini로 프론트엔드)
-.\bin\oma-spawn.ps1 pixel "Create login UI" `
+.\bin\oma-spawn.ps1 nova "Create login UI" `
     -AiBackend "gemini-3.0-pro"
 
 # CodeSmith (Claude Code로 백엔드)
-.\bin\oma-spawn.ps1 codesmith "Implement auth API" `
+.\bin\oma-spawn.ps1 forge "Implement auth API" `
     -AiBackend "claude-code"
 
 # Async execution (background)
-.\bin\oma-spawn.ps1 data-wizard "Process large CSV" `
+.\bin\oma-spawn.ps1 flow "Process large CSV" `
     -Async
 ```
 
@@ -81,7 +81,7 @@ Update `bin/oma.ps1` to include:
 
 Then use:
 ```bash
-oma spawn oracle "Design system"
+oma spawn atlas "Design system"
 oma session list
 ```
 
@@ -99,8 +99,8 @@ oma session list
 ## 실제 사용 예시
 
 ```powershell
-PS> oma spawn oracle "Design e-commerce architecture"
-[OMA] Spawning SubAgent: oracle
+PS> oma spawn atlas "Design e-commerce architecture"
+[OMA] Spawning SubAgent: atlas
   AI Backend: codex
   Task: Design e-commerce architecture
 [OMA] Session ID: a1b2c3d4-...
