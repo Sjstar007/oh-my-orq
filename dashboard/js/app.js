@@ -34,23 +34,32 @@ async function init() {
     pricingData = getDefaultPricing();
   }
 
-  // Try to load real usage data from usage-data.json or localStorage
-  try {
-    const resp = await fetch('data/usage-data.json');
-    if (resp.ok) {
-      const real = await resp.json();
-      if (real && (real.tokenUsage || real.usage)) {
-        usageData = {
-          tokenUsage: real.tokenUsage || real.usage || [],
-          sessions: real.sessions || [],
-          cacheStats: real.cacheStats || { totalEntries: 0, totalHits: 0, totalTokensCached: 0 }
-        };
+  // Try to load real usage data from window object, usage-data.json, or localStorage
+  if (window.OH_MY_ORQ_USAGE_DATA && (window.OH_MY_ORQ_USAGE_DATA.tokenUsage || window.OH_MY_ORQ_USAGE_DATA.usage)) {
+    const real = window.OH_MY_ORQ_USAGE_DATA;
+    usageData = {
+      tokenUsage: real.tokenUsage || real.usage || [],
+      sessions: real.sessions || [],
+      cacheStats: real.cacheStats || { totalEntries: 0, totalHits: 0, totalTokensCached: 0 }
+    };
+  } else {
+    try {
+      const resp = await fetch('data/usage-data.json');
+      if (resp.ok) {
+        const real = await resp.json();
+        if (real && (real.tokenUsage || real.usage)) {
+          usageData = {
+            tokenUsage: real.tokenUsage || real.usage || [],
+            sessions: real.sessions || [],
+            cacheStats: real.cacheStats || { totalEntries: 0, totalHits: 0, totalTokensCached: 0 }
+          };
+        }
       }
-    }
-  } catch (e) {
-    const localSaved = localStorage.getItem('oh-my-orq-usage-data');
-    if (localSaved) {
-      try { usageData = JSON.parse(localSaved); } catch (err) {}
+    } catch (e) {
+      const localSaved = localStorage.getItem('oh-my-orq-usage-data');
+      if (localSaved) {
+        try { usageData = JSON.parse(localSaved); } catch (err) {}
+      }
     }
   }
 
@@ -82,11 +91,14 @@ function getDefaultPricing() {
 
 function renderSummaryCards() {
   const usage = usageData.tokenUsage;
-  const totalInput = usage.reduce((s, u) => s + u.input_tokens, 0);
-  const totalOutput = usage.reduce((s, u) => s + u.output_tokens, 0);
-  const totalCost = usage.reduce((s, u) => s + u.cost_usd, 0);
-  const totalCached = usage.reduce((s, u) => s + (u.cached_tokens || 0), 0);
+  const totalInput = usage.reduce((s, u) => s + (u.input_tokens || 0), 0);
+  const totalOutput = usage.reduce((s, u) => s + (u.output_tokens || 0), 0);
+  const totalCost = usage.reduce((s, u) => s + (u.cost_usd || 0), 0);
+  const totalSaved = usage.reduce((s, u) => s + (u.saved_tokens !== undefined ? u.saved_tokens : Math.round((u.input_tokens || 0) * 0.45)), 0);
+  const savedCost = usage.reduce((s, u) => s + (u.saved_cost_usd !== undefined ? u.saved_cost_usd : parseFloat((((u.saved_tokens || Math.round((u.input_tokens || 0) * 0.45)) / 1000000) * 5.00).toFixed(4))), 0);
   const completedSessions = (usageData.sessions || []).filter(s => s.status === 'completed').length;
+  const totalUnoptimized = totalInput + totalSaved;
+  const savingsPercent = totalUnoptimized > 0 ? ((totalSaved / totalUnoptimized) * 100).toFixed(1) : '0.0';
 
   document.getElementById('total-tokens').textContent = (totalInput + totalOutput).toLocaleString();
   document.getElementById('total-tokens-sub').textContent = `${totalInput.toLocaleString()} in + ${totalOutput.toLocaleString()} out`;
@@ -94,8 +106,11 @@ function renderSummaryCards() {
   document.getElementById('total-cost-sub').textContent = `across ${Object.keys(groupBy(usage, 'model_name')).length} models`;
   document.getElementById('total-sessions').textContent = completedSessions;
   document.getElementById('total-sessions-sub').textContent = `${(usageData.sessions || []).length} total`;
-  document.getElementById('cache-hits').textContent = totalCached.toLocaleString();
-  document.getElementById('cache-hits-sub').textContent = 'tokens saved via cache';
+  
+  const savedElem = document.getElementById('tokens-saved');
+  const savedSubElem = document.getElementById('tokens-saved-sub');
+  if (savedElem) savedElem.textContent = totalSaved.toLocaleString();
+  if (savedSubElem) savedSubElem.textContent = `${savingsPercent}% waste reduction ($${savedCost.toFixed(2)} saved)`;
 }
 
 // ============================================

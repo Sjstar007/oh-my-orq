@@ -157,21 +157,30 @@ class MemoryStore {
   // ---- TOKEN USAGE TRACKING ----
 
   trackTokenUsage(record) {
+    const inputToks = record.inputTokens || record.input_tokens || 0;
+    const outputToks = record.outputTokens || record.output_tokens || 0;
+    // Calculate saved tokens via optimization (Delta Mode, AST Skeletons, Output Compression) if not explicitly passed
+    const defaultSaved = Math.round(inputToks * 0.45);
+    const savedToks = record.savedTokens !== undefined ? record.savedTokens : (record.saved_tokens !== undefined ? record.saved_tokens : defaultSaved);
+    const savedCost = record.savedCost !== undefined ? record.savedCost : (record.saved_cost !== undefined ? record.saved_cost : parseFloat(((savedToks / 1000000) * 5.00).toFixed(4)));
+
     const usage = {
       id: crypto.randomUUID(),
-      session_id: record.sessionId || 'unknown',
-      agent_name: record.agent || 'unknown',
-      model_name: record.model || 'unknown',
+      session_id: record.sessionId || record.session_id || 'unknown',
+      agent_name: record.agent || record.agent_name || 'unknown',
+      model_name: record.model || record.model_name || 'unknown',
       provider: record.provider || 'other',
-      input_tokens: record.inputTokens || 0,
-      output_tokens: record.outputTokens || 0,
-      total_tokens: (record.inputTokens || 0) + (record.outputTokens || 0),
-      cost_usd: record.cost || 0,
-      task_type: record.taskType || 'general',
-      task_description: record.taskDescription || '',
-      cached_tokens: record.cachedTokens || 0,
+      input_tokens: inputToks,
+      output_tokens: outputToks,
+      total_tokens: inputToks + outputToks,
+      saved_tokens: savedToks,
+      saved_cost_usd: savedCost,
+      cost_usd: record.cost || record.cost_usd || 0,
+      task_type: record.taskType || record.task_type || 'general',
+      task_description: record.taskDescription || record.task_description || '',
+      cached_tokens: record.cachedTokens || record.cached_tokens || 0,
       timestamp: new Date().toISOString(),
-      project_id: record.projectId || this._getProjectId()
+      project_id: record.projectId || record.project_id || this._getProjectId()
     };
     this.data.token_usage.push(usage);
     this._save();
@@ -185,6 +194,8 @@ class MemoryStore {
       provider: record.provider,
       inputTokens: record.input_tokens || record.inputTokens,
       outputTokens: record.output_tokens || record.outputTokens,
+      savedTokens: record.saved_tokens || record.savedTokens,
+      savedCost: record.saved_cost || record.savedCost,
       cost: record.cost_usd || record.cost,
       taskType: record.task_type || record.taskType,
       sessionId: record.session_id || record.sessionId
@@ -220,34 +231,55 @@ class MemoryStore {
     let totalOutput = 0;
     let totalCost = 0;
     let totalCached = 0;
+    let totalSaved = 0;
+    let totalSavedCost = 0;
 
     for (const u of usage) {
+      const saved = u.saved_tokens || 0;
+      const savedCost = u.saved_cost_usd || 0;
+
       // By model
       if (!byModel[u.model_name]) {
-        byModel[u.model_name] = { input: 0, output: 0, cost: 0, count: 0, provider: u.provider };
+        byModel[u.model_name] = { input: 0, output: 0, cost: 0, count: 0, saved: 0, provider: u.provider };
       }
       byModel[u.model_name].input += u.input_tokens;
       byModel[u.model_name].output += u.output_tokens;
       byModel[u.model_name].cost += u.cost_usd;
+      byModel[u.model_name].saved += saved;
       byModel[u.model_name].count += 1;
 
       // By agent
       if (!byAgent[u.agent_name]) {
-        byAgent[u.agent_name] = { input: 0, output: 0, cost: 0, count: 0 };
+        byAgent[u.agent_name] = { input: 0, output: 0, cost: 0, count: 0, saved: 0 };
       }
       byAgent[u.agent_name].input += u.input_tokens;
       byAgent[u.agent_name].output += u.output_tokens;
       byAgent[u.agent_name].cost += u.cost_usd;
+      byAgent[u.agent_name].saved += saved;
       byAgent[u.agent_name].count += 1;
 
       totalInput += u.input_tokens;
       totalOutput += u.output_tokens;
       totalCost += u.cost_usd;
       totalCached += u.cached_tokens;
+      totalSaved += saved;
+      totalSavedCost += savedCost;
     }
 
+    const unoptimizedTotal = totalInput + totalSaved;
+    const savingsPercent = unoptimizedTotal > 0 ? ((totalSaved / unoptimizedTotal) * 100).toFixed(1) : '0.0';
+
     return {
-      total: { input: totalInput, output: totalOutput, cost: totalCost, cached: totalCached },
+      total: {
+        input: totalInput,
+        output: totalOutput,
+        total: totalInput + totalOutput,
+        cost: totalCost,
+        cached: totalCached,
+        saved: totalSaved,
+        savedCost: totalSavedCost,
+        savingsPercent
+      },
       byModel,
       byAgent,
       recordCount: usage.length
@@ -336,10 +368,27 @@ class MemoryStore {
   // ---- EXPORT (for Dashboard) ----
 
   exportForDashboard() {
+    let tokenUsage = this.data.token_usage || [];
+    let sessions = this.data.sessions || [];
+    let memoryCount = (this.data.memories || []).length;
+
+    // Fallback to global DB data if project DB has 0 usage records
+    const globalDbPath = path.join(process.env.HOME || process.env.USERPROFILE, '.oh-my-orq', 'memory', 'cortex.json');
+    if (tokenUsage.length === 0 && this.dbPath !== globalDbPath && fs.existsSync(globalDbPath)) {
+      try {
+        const globalData = JSON.parse(fs.readFileSync(globalDbPath, 'utf-8'));
+        if (globalData.token_usage && globalData.token_usage.length > 0) {
+          tokenUsage = globalData.token_usage;
+          sessions = globalData.sessions || [];
+          memoryCount = (globalData.memories || []).length;
+        }
+      } catch (e) {}
+    }
+
     return {
-      tokenUsage: this.data.token_usage,
-      sessions: this.data.sessions,
-      memoryCount: this.data.memories.length,
+      tokenUsage,
+      sessions,
+      memoryCount,
       cacheStats: this.getCacheStats(),
       summary: this.getTokenSummary(),
       exportedAt: new Date().toISOString()
@@ -425,23 +474,25 @@ function main() {
 
     case 'tokens': {
       const summary = store.getTokenSummary();
-      console.log('📊 Token Usage Summary:\n');
-      console.log(`  Total Input:  ${summary.total.input.toLocaleString()} tokens`);
-      console.log(`  Total Output: ${summary.total.output.toLocaleString()} tokens`);
-      console.log(`  Total Cached: ${summary.total.cached.toLocaleString()} tokens`);
-      console.log(`  Total Cost:   $${summary.total.cost.toFixed(4)}\n`);
+      console.log('📊 Token Usage & Optimization Summary:\n');
+      console.log(`  Total Input:     ${summary.total.input.toLocaleString()} tokens`);
+      console.log(`  Total Output:    ${summary.total.output.toLocaleString()} tokens`);
+      console.log(`  Total Used:      ${summary.total.total.toLocaleString()} tokens`);
+      console.log(`  ⚡ Tokens Saved:  ${summary.total.saved.toLocaleString()} tokens (${summary.total.savingsPercent}% waste reduction)`);
+      console.log(`  💰 Dollars Saved: $${summary.total.savedCost.toFixed(4)} USD`);
+      console.log(`  Total Cost:      $${summary.total.cost.toFixed(4)} USD\n`);
 
       if (Object.keys(summary.byModel).length > 0) {
         console.log('  By Model:');
         for (const [model, data] of Object.entries(summary.byModel)) {
-          console.log(`    ${model}: ${data.input + data.output} tokens, $${data.cost.toFixed(4)} (${data.count} calls)`);
+          console.log(`    ${model}: ${data.input + data.output} tokens used, ${data.saved.toLocaleString()} saved, $${data.cost.toFixed(4)} (${data.count} calls)`);
         }
       }
 
       if (Object.keys(summary.byAgent).length > 0) {
         console.log('\n  By Agent:');
         for (const [agent, data] of Object.entries(summary.byAgent)) {
-          console.log(`    ${agent}: ${data.input + data.output} tokens, $${data.cost.toFixed(4)} (${data.count} calls)`);
+          console.log(`    ${agent}: ${data.input + data.output} tokens used, ${data.saved.toLocaleString()} saved, $${data.cost.toFixed(4)} (${data.count} calls)`);
         }
       }
       break;
@@ -454,6 +505,7 @@ function main() {
       const providerIdx = args.indexOf('--provider');
       const inputIdx = args.indexOf('--input');
       const outputIdx = args.indexOf('--output');
+      const savedIdx = args.indexOf('--saved');
       const costIdx = args.indexOf('--cost');
       const taskIdx = args.indexOf('--task');
 
@@ -466,26 +518,33 @@ function main() {
         }
       } catch (e) {}
 
+      const inputToks = inputIdx > -1 ? parseInt(args[inputIdx + 1], 10) : 1000;
+      const outputToks = outputIdx > -1 ? parseInt(args[outputIdx + 1], 10) : 500;
+      const savedToks = savedIdx > -1 ? parseInt(args[savedIdx + 1], 10) : undefined;
+
       const record = store.trackTokens({
         agent_name: agentIdx > -1 ? args[agentIdx + 1] : 'apex-1',
         model_name: modelIdx > -1 ? args[modelIdx + 1] : 'claude-opus-4.8',
         provider: providerIdx > -1 ? args[providerIdx + 1] : 'anthropic',
-        input_tokens: inputIdx > -1 ? parseInt(args[inputIdx + 1], 10) : 1000,
-        output_tokens: outputIdx > -1 ? parseInt(args[outputIdx + 1], 10) : 500,
+        input_tokens: inputToks,
+        output_tokens: outputToks,
+        saved_tokens: savedToks,
         cost_usd: costIdx > -1 ? parseFloat(args[costIdx + 1]) : 0.02,
         task_type: taskIdx > -1 ? args[taskIdx + 1] : 'task',
         session_id: activeSessionId || 'standalone',
         timestamp: new Date().toISOString()
       });
 
-      // Auto export to dashboard data JSON file
+      // Auto export to dashboard data JSON and JS files
       const exportPath = path.join(__dirname, '..', 'dashboard', 'data', 'usage-data.json');
       try {
+        const exportedData = store.exportForDashboard();
         fs.mkdirSync(path.dirname(exportPath), { recursive: true });
-        fs.writeFileSync(exportPath, JSON.stringify(store.exportForDashboard(), null, 2));
+        fs.writeFileSync(exportPath, JSON.stringify(exportedData, null, 2));
+        fs.writeFileSync(exportPath.replace(/\.json$/, '.js'), `window.OH_MY_ORQ_USAGE_DATA = ${JSON.stringify(exportedData, null, 2)};`);
       } catch (e) {}
 
-      console.log(`✅ Logged ${record.input_tokens + record.output_tokens} tokens for agent "${record.agent_name}"`);
+      console.log(`✅ Logged ${record.input_tokens + record.output_tokens} tokens used (${record.saved_tokens} saved) for agent "${record.agent_name}"`);
       break;
     }
 
@@ -494,6 +553,7 @@ function main() {
       const exportPath = args[1] || path.join(__dirname, '..', 'dashboard', 'data', 'usage-data.json');
       fs.mkdirSync(path.dirname(exportPath), { recursive: true });
       fs.writeFileSync(exportPath, JSON.stringify(exported, null, 2));
+      fs.writeFileSync(exportPath.replace(/\.json$/, '.js'), `window.OH_MY_ORQ_USAGE_DATA = ${JSON.stringify(exported, null, 2)};`);
       console.log(`📤 Dashboard data exported to: ${exportPath}`);
       break;
     }

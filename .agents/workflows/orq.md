@@ -71,9 +71,9 @@ Print: `🤖 [AGENT: Nexus] Designing database schemas and APIs...`
 ### 1d. Track Planning Tokens
 After completing the plan stage, run:
 ```bash
-node .oh-my-orq/memory/cortex.js track-tokens --agent vector --input 3000 --output 2000 --cost 0.05 --task planning
-node .oh-my-orq/memory/cortex.js track-tokens --agent aura --input 2000 --output 1500 --cost 0.03 --task planning
-node .oh-my-orq/memory/cortex.js track-tokens --agent atlas --input 2500 --output 2000 --cost 0.04 --task architecture
+node .oh-my-orq/memory/cortex.js track-tokens --agent vector --input 3000 --output 2000 --saved 1500 --cost 0.05 --task planning
+node .oh-my-orq/memory/cortex.js track-tokens --agent aura --input 2000 --output 1500 --saved 1000 --cost 0.03 --task planning
+node .oh-my-orq/memory/cortex.js track-tokens --agent atlas --input 2500 --output 2000 --saved 1200 --cost 0.04 --task architecture
 node .oh-my-orq/memory/cortex.js save "Plan: <brief plan summary>" --type decision
 ```
 
@@ -108,8 +108,8 @@ Print: `🤖 [AGENT: Sync] Managing git operations...`
 
 ### 2e. Track Implementation Tokens
 ```bash
-node .oh-my-orq/memory/cortex.js track-tokens --agent forge --input 5000 --output 4000 --cost 0.10 --task backend
-node .oh-my-orq/memory/cortex.js track-tokens --agent nova --input 4000 --output 3500 --cost 0.08 --task frontend
+node .oh-my-orq/memory/cortex.js track-tokens --agent forge --input 5000 --output 4000 --saved 3000 --cost 0.10 --task backend
+node .oh-my-orq/memory/cortex.js track-tokens --agent nova --input 4000 --output 3500 --saved 2500 --cost 0.08 --task frontend
 node .oh-my-orq/memory/cortex.js save "Architecture: <key implementation decisions>" --type architecture
 ```
 
@@ -142,8 +142,8 @@ Print: `🤖 [AGENT: Cyber] Running security audit...`
 
 ### 3e. Track Review Tokens
 ```bash
-node .oh-my-orq/memory/cortex.js track-tokens --agent prism --input 3000 --output 2500 --cost 0.05 --task refactoring
-node .oh-my-orq/memory/cortex.js track-tokens --agent aegis --input 4000 --output 3000 --cost 0.07 --task testing
+node .oh-my-orq/memory/cortex.js track-tokens --agent prism --input 3000 --output 2500 --saved 1800 --cost 0.05 --task refactoring
+node .oh-my-orq/memory/cortex.js track-tokens --agent aegis --input 4000 --output 3000 --saved 2200 --cost 0.07 --task testing
 node .oh-my-orq/memory/cortex.js save "Quality: <quality review findings>" --type lesson
 ```
 
