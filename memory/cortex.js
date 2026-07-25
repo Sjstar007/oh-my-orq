@@ -437,6 +437,15 @@ function main() {
       const costIdx = args.indexOf('--cost');
       const taskIdx = args.indexOf('--task');
 
+      // Auto-link to active session if one exists
+      const sessionFile = path.join(MEMORY_DIR, '.active-session');
+      let activeSessionId = null;
+      try {
+        if (fs.existsSync(sessionFile)) {
+          activeSessionId = fs.readFileSync(sessionFile, 'utf8').trim();
+        }
+      } catch (e) {}
+
       const record = store.trackTokens({
         agent_name: agentIdx > -1 ? args[agentIdx + 1] : 'apex-1',
         model_name: modelIdx > -1 ? args[modelIdx + 1] : 'claude-opus-4.8',
@@ -445,6 +454,7 @@ function main() {
         output_tokens: outputIdx > -1 ? parseInt(args[outputIdx + 1], 10) : 500,
         cost_usd: costIdx > -1 ? parseFloat(args[costIdx + 1]) : 0.02,
         task_type: taskIdx > -1 ? args[taskIdx + 1] : 'task',
+        session_id: activeSessionId || 'standalone',
         timestamp: new Date().toISOString()
       });
 
@@ -532,6 +542,79 @@ function main() {
       break;
     }
 
+    case 'start-session': {
+      const desc = args.slice(1).join(' ') || 'Orq orchestration session';
+      const session = store.startSession(desc);
+      console.log(`🟢 Session started: ${session.id}`);
+      console.log(`   Description: ${desc}`);
+      console.log(`   Started at: ${session.started_at}`);
+      // Write session ID to a temp file so other commands can reference it
+      const sessionFile = path.join(MEMORY_DIR, '.active-session');
+      fs.writeFileSync(sessionFile, session.id);
+      break;
+    }
+
+    case 'end-session': {
+      const sessionFile = path.join(MEMORY_DIR, '.active-session');
+      let sessionId = args[1];
+      if (!sessionId && fs.existsSync(sessionFile)) {
+        sessionId = fs.readFileSync(sessionFile, 'utf8').trim();
+      }
+      if (!sessionId) {
+        console.error('❌ No active session found. Pass a session ID or start a session first.');
+        break;
+      }
+      const session = store.endSession(sessionId, 'completed');
+      if (session) {
+        console.log(`🔴 Session ended: ${sessionId}`);
+        console.log(`   Total tokens: ${session.total_tokens}`);
+        console.log(`   Total cost:   $${session.total_cost.toFixed(4)}`);
+        console.log(`   Agents used:  ${session.agents_used.join(', ') || 'none'}`);
+      } else {
+        console.log(`⚠️  Session ${sessionId} not found.`);
+      }
+      // Auto-export dashboard data on session end
+      try {
+        const exportPath = path.join(__dirname, '..', 'dashboard', 'data', 'usage-data.json');
+        fs.mkdirSync(path.dirname(exportPath), { recursive: true });
+        fs.writeFileSync(exportPath, JSON.stringify(store.exportForDashboard(), null, 2));
+        console.log(`📤 Dashboard data auto-exported.`);
+      } catch (e) {}
+      // Clean up session file
+      try { fs.unlinkSync(sessionFile); } catch (e) {}
+      break;
+    }
+
+    case 'active-session': {
+      const sessionFile = path.join(MEMORY_DIR, '.active-session');
+      if (fs.existsSync(sessionFile)) {
+        console.log(fs.readFileSync(sessionFile, 'utf8').trim());
+      } else {
+        console.log('none');
+      }
+      break;
+    }
+
+    case 'recall': {
+      const query = args.slice(1).join(' ');
+      if (!query) {
+        console.log('Usage: cortex recall "<query>"');
+        break;
+      }
+      const memories = store.recallMemories(query, { limit: 5 });
+      if (memories.length === 0) {
+        console.log(`🧠 No memories found for "${query}".`);
+      } else {
+        console.log(`🧠 Recalled ${memories.length} memories for "${query}":\n`);
+        for (const m of memories) {
+          const age = Math.round((Date.now() - new Date(m.created_at).getTime()) / 60000);
+          console.log(`  [${m.type || 'memory'}] ${m.content.slice(0, 150)}`);
+          console.log(`    Score: ${m.relevance?.toFixed(3) || 'N/A'} | ${age}m ago\n`);
+        }
+      }
+      break;
+    }
+
     default:
       console.log(`
 🧠 Oh My Orq Cortex — Shared Memory System
@@ -542,6 +625,10 @@ Usage:
   cortex list [--type <type>]                                 List memories
   cortex clear                                                Clear project memories
   cortex tokens                                               Show token usage summary
+  cortex track-tokens --agent <name> --input <n> --output <n> Log token usage
+  cortex start-session "<description>"                        Start a tracking session
+  cortex end-session [session-id]                             End active session
+  cortex active-session                                       Print active session ID
   cortex export [path]                                        Export data for dashboard
   cortex --test                                               Run self-test
 

@@ -174,6 +174,38 @@ async function main() {
     console.log(`  ✓ Installed ${workflows.length} slash command workflows across IDE target locations`);
   }
 
+  // Copy hooks to IDE locations
+  const hooksSource = path.join(sourceDir, 'hooks');
+  if (fs.existsSync(hooksSource)) {
+    const ideHookTargets = [
+      path.join(homeDir, '.gemini', 'config', 'hooks'),
+      path.join(homeDir, '.gemini', 'antigravity', 'hooks'),
+      path.join(homeDir, '.agents', 'hooks'),
+    ];
+    const hookFiles = fs.readdirSync(hooksSource).filter(f => f.endsWith('.js'));
+    for (const targetDir of ideHookTargets) {
+      fs.mkdirSync(targetDir, { recursive: true });
+      for (const hf of hookFiles) {
+        fs.copyFileSync(path.join(hooksSource, hf), path.join(targetDir, hf));
+      }
+    }
+    // Also copy to project scope if --project
+    if (shouldInstallProject) {
+      const projectHookTargets = [
+        path.join(process.cwd(), '.agents', 'hooks'),
+        path.join(process.cwd(), '.cursor', 'hooks'),
+        path.join(process.cwd(), '.claude', 'hooks'),
+      ];
+      for (const pTarget of projectHookTargets) {
+        fs.mkdirSync(pTarget, { recursive: true });
+        for (const hf of hookFiles) {
+          fs.copyFileSync(path.join(hooksSource, hf), path.join(pTarget, hf));
+        }
+      }
+    }
+    console.log(`  ✓ Installed ${hookFiles.length} hooks (PreToolUse, PostToolUse, LearningHook) across IDE locations`);
+  }
+
   // Create binary script in ~/.oh-my-orq/bin/orq
   const orqBinFile = path.join(orqBinDir, 'orq');
   const binScriptContent = `#!/bin/sh\nexec node "${path.join(orqAppDir, 'cli', 'orq.js')}" "$@"\n`;

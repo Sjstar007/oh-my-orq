@@ -137,3 +137,59 @@ After integration, run the Ralph Loop:
 2. **Ask**: "Would a senior engineer approve this?"
 3. **Loop** if quality is insufficient — re-delegate with more specific instructions
 4. **Perfect** until the output meets production standards
+
+## ⚡ Harness Protocol (MANDATORY)
+
+> **You MUST follow these steps during every orchestration. Do NOT skip them.**
+
+### Before Starting Any Task
+Run these commands via `run_command` to activate the framework harness:
+```bash
+# Start a tracking session
+node memory/cortex.js start-session "Task: <brief description>"
+
+# Recall relevant project memories
+node memory/cortex.js recall "<task keywords>"
+```
+Read the recalled memories output. Use past decisions, patterns, and architectural context.
+
+### During Each Agent Phase
+1. **Print a visible agent banner** before activating each specialist:
+   ```
+   🤖 [AGENT: <AgentName>] <What this agent is doing>...
+   ```
+2. **Read the agent's SKILL.md** from `.agents/skills/<agent-name>/SKILL.md` before doing that agent's work.
+
+### After Each Agent Phase
+Run a `track-tokens` command for every agent that contributed:
+```bash
+node memory/cortex.js track-tokens --agent <agent-name> --input <estimate> --output <estimate> --cost <estimate> --task <task-type>
+```
+
+### After Key Decisions
+Save important decisions and architectural choices to shared memory:
+```bash
+node memory/cortex.js save "<decision summary>" --type decision
+```
+
+### At End of Task
+```bash
+# End session (auto-calculates totals)
+node memory/cortex.js end-session
+
+# Print token summary
+node memory/cortex.js tokens
+
+# Export to dashboard
+node memory/cortex.js export
+```
+
+### Token Estimation Guide
+When estimating tokens for `track-tokens`, use these rough guidelines:
+| Task Complexity | Input Tokens | Output Tokens | Estimated Cost |
+|----------------|-------------|--------------|----------------|
+| Simple (grep, read) | 500–1500 | 200–800 | $0.01–0.02 |
+| Medium (implement) | 2000–5000 | 1500–4000 | $0.03–0.10 |
+| Complex (architect) | 4000–8000 | 3000–6000 | $0.08–0.15 |
+| Heavy (full review) | 6000–12000 | 4000–8000 | $0.12–0.25 |
+
