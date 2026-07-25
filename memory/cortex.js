@@ -22,13 +22,33 @@ const crypto = require('crypto');
 // DATABASE SETUP (SQLite via better-sqlite3 or JSON fallback)
 // ============================================
 
-const MEMORY_DIR = path.join(process.env.HOME || process.env.USERPROFILE, '.oh-my-orq', 'memory');
-const DB_PATH = path.join(MEMORY_DIR, 'cortex.json');
-
-// Ensure directory exists
-if (!fs.existsSync(MEMORY_DIR)) {
-  fs.mkdirSync(MEMORY_DIR, { recursive: true });
+function resolveDbPath() {
+  const projectDb = path.join(process.cwd(), '.oh-my-orq', 'memory', 'cortex.json');
+  const projectOrq = path.join(process.cwd(), '.oh-my-orq');
+  if (fs.existsSync(projectDb) || fs.existsSync(projectOrq)) {
+    const pDir = path.join(process.cwd(), '.oh-my-orq', 'memory');
+    if (!fs.existsSync(pDir)) fs.mkdirSync(pDir, { recursive: true });
+    return projectDb;
+  }
+  const gDir = path.join(process.env.HOME || process.env.USERPROFILE, '.oh-my-orq', 'memory');
+  if (!fs.existsSync(gDir)) fs.mkdirSync(gDir, { recursive: true });
+  return path.join(gDir, 'cortex.json');
 }
+
+function resolveMemoryDir() {
+  const projectOrq = path.join(process.cwd(), '.oh-my-orq');
+  if (fs.existsSync(projectOrq)) {
+    const pDir = path.join(process.cwd(), '.oh-my-orq', 'memory');
+    if (!fs.existsSync(pDir)) fs.mkdirSync(pDir, { recursive: true });
+    return pDir;
+  }
+  const gDir = path.join(process.env.HOME || process.env.USERPROFILE, '.oh-my-orq', 'memory');
+  if (!fs.existsSync(gDir)) fs.mkdirSync(gDir, { recursive: true });
+  return gDir;
+}
+
+const MEMORY_DIR = resolveMemoryDir();
+const DB_PATH = resolveDbPath();
 
 /**
  * JSON-based memory store (no external dependencies required)
@@ -36,7 +56,7 @@ if (!fs.existsSync(MEMORY_DIR)) {
  */
 class MemoryStore {
   constructor(dbPath) {
-    this.dbPath = dbPath;
+    this.dbPath = dbPath || resolveDbPath();
     this.data = this._load();
   }
 

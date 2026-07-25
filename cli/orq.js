@@ -299,15 +299,25 @@ function openGraph() {
 }
 
 function openDashboard() {
-  const dashboardPath = path.join(__dirname, '..', 'dashboard', 'index.html');
-  handleMemory(['export', path.join(__dirname, '..', 'dashboard', 'data', 'usage-data.json')]);
+  const globalDashboardDir = path.join(__dirname, '..', 'dashboard');
+  const projectDashboardDir = path.join(process.cwd(), 'dashboard');
+
+  // Export usage data from Cortex to BOTH global and project dashboard data folders
+  handleMemory(['export', path.join(globalDashboardDir, 'data', 'usage-data.json')]);
+  if (fs.existsSync(projectDashboardDir)) {
+    handleMemory(['export', path.join(projectDashboardDir, 'data', 'usage-data.json')]);
+  }
+
+  const targetHtml = fs.existsSync(path.join(projectDashboardDir, 'index.html'))
+    ? path.join(projectDashboardDir, 'index.html')
+    : path.join(globalDashboardDir, 'index.html');
 
   const opener = os.platform() === 'darwin' ? 'open' : os.platform() === 'win32' ? 'start' : 'xdg-open';
   try {
-    execSync(`${opener} "${dashboardPath}"`);
-    console.log('🌐 Dashboard opened in browser');
+    execSync(`${opener} "${targetHtml}"`);
+    console.log(`🌐 Opened Dashboard: ${targetHtml}`);
   } catch (e) {
-    console.log(`📂 Open this file in your browser: ${dashboardPath}`);
+    console.log(`📂 Open this file in your browser: ${targetHtml}`);
   }
 }
 
