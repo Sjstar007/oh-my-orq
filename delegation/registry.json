@@ -1,0 +1,217 @@
+{
+  "version": "1.2.0",
+  "orchestrators": [
+    {
+      "name": "sisyphus",
+      "role": "master-orchestrator",
+      "canDelegate": true,
+      "delegates": ["all"],
+      "model": "claude-opus-4.8"
+    },
+    {
+      "name": "prometheus",
+      "role": "planner",
+      "canDelegate": true,
+      "delegates": ["metis"],
+      "model": "claude-sonnet-5"
+    },
+    {
+      "name": "metis",
+      "role": "plan-validator",
+      "canDelegate": false,
+      "delegates": [],
+      "model": "claude-sonnet-5"
+    }
+  ],
+  "specialists": [
+    {
+      "name": "oracle",
+      "specialty": "architecture",
+      "accepts": ["design", "architecture", "review", "strategy"],
+      "model": "claude-opus-4.8",
+      "tier": "high"
+    },
+    {
+      "name": "architect",
+      "specialty": "database-api",
+      "accepts": ["schema", "api-design", "database"],
+      "model": "claude-sonnet-5",
+      "tier": "mid"
+    },
+    {
+      "name": "strategist",
+      "specialty": "decisions",
+      "accepts": ["decision", "comparison", "evaluation"],
+      "model": "claude-sonnet-5",
+      "tier": "mid"
+    },
+    {
+      "name": "codesmith",
+      "specialty": "backend",
+      "accepts": ["implement", "code", "backend"],
+      "model": "claude-sonnet-5",
+      "tier": "mid"
+    },
+    {
+      "name": "pixel",
+      "specialty": "ui-ux",
+      "accepts": ["ui", "component", "frontend", "design"],
+      "model": "gemini-2.5-pro",
+      "tier": "mid"
+    },
+    {
+      "name": "refactorer",
+      "specialty": "code-quality",
+      "accepts": ["refactor", "cleanup", "improve"],
+      "model": "claude-sonnet-5",
+      "tier": "mid"
+    },
+    {
+      "name": "performance-expert",
+      "specialty": "optimization",
+      "accepts": ["optimize", "performance", "profile"],
+      "model": "claude-opus-4.8",
+      "tier": "high"
+    },
+    {
+      "name": "tester",
+      "specialty": "testing",
+      "accepts": ["test", "unit", "integration"],
+      "model": "claude-sonnet-5",
+      "tier": "mid"
+    },
+    {
+      "name": "qa-engineer",
+      "specialty": "manual-testing",
+      "accepts": ["manual-test", "test-plan"],
+      "model": "claude-haiku-4.5",
+      "tier": "low"
+    },
+    {
+      "name": "security-guard",
+      "specialty": "security",
+      "accepts": ["security", "audit", "vulnerability"],
+      "model": "claude-opus-4.8",
+      "tier": "high"
+    },
+    {
+      "name": "librarian",
+      "specialty": "research",
+      "accepts": ["research", "example", "documentation"],
+      "model": "claude-haiku-4.5",
+      "tier": "low"
+    },
+    {
+      "name": "explorer",
+      "specialty": "code-navigation",
+      "accepts": ["find", "search", "locate"],
+      "model": "claude-haiku-4.5",
+      "tier": "low"
+    },
+    {
+      "name": "scribe",
+      "specialty": "documentation",
+      "accepts": ["document", "readme", "guide"],
+      "model": "claude-sonnet-5",
+      "tier": "mid"
+    },
+    {
+      "name": "researcher",
+      "specialty": "cross-repo-analysis",
+      "accepts": ["analyze", "compare", "research"],
+      "model": "claude-sonnet-5",
+      "tier": "mid"
+    },
+    {
+      "name": "scientist-low",
+      "specialty": "quick-data",
+      "accepts": ["data-explore", "stats"],
+      "model": "claude-haiku-4.5",
+      "tier": "low"
+    },
+    {
+      "name": "scientist",
+      "specialty": "standard-analysis",
+      "accepts": ["analyze-data", "statistics"],
+      "model": "claude-sonnet-5",
+      "tier": "mid"
+    },
+    {
+      "name": "scientist-high",
+      "specialty": "advanced-research",
+      "accepts": ["ml", "research", "complex-analysis"],
+      "model": "claude-opus-4.8",
+      "tier": "high"
+    },
+    {
+      "name": "data-wizard",
+      "specialty": "etl",
+      "accepts": ["etl", "pipeline", "transform"],
+      "model": "claude-sonnet-5",
+      "tier": "mid"
+    },
+    {
+      "name": "sql-master",
+      "specialty": "database-queries",
+      "accepts": ["query", "optimize-sql"],
+      "model": "claude-sonnet-5",
+      "tier": "mid"
+    },
+    {
+      "name": "debugger",
+      "specialty": "debugging",
+      "accepts": ["debug", "fix", "troubleshoot"],
+      "model": "claude-sonnet-5",
+      "tier": "mid"
+    },
+    {
+      "name": "git-master",
+      "specialty": "version-control-and-github",
+      "accepts": ["commit", "branch", "git", "pull", "push", "pr", "conflict"],
+      "model": "claude-haiku-4.5",
+      "tier": "low"
+    },
+    {
+      "name": "mcp-master",
+      "specialty": "mcp-orchestration",
+      "accepts": ["mcp", "github-mcp", "db-mcp", "web-mcp"],
+      "model": "claude-sonnet-5",
+      "tier": "mid"
+    },
+    {
+      "name": "hermes",
+      "specialty": "messaging-and-notifications",
+      "accepts": ["hermes", "notify", "webhook", "message"],
+      "model": "claude-haiku-4.5",
+      "tier": "low"
+    },
+    {
+      "name": "devops-engineer",
+      "specialty": "deployment",
+      "accepts": ["deploy", "cicd", "infrastructure"],
+      "model": "claude-opus-4.8",
+      "tier": "high"
+    },
+    {
+      "name": "playwright-master",
+      "specialty": "e2e-testing",
+      "accepts": ["e2e", "browser-test", "automation"],
+      "model": "claude-sonnet-5",
+      "tier": "mid"
+    },
+    {
+      "name": "multimodal-looker",
+      "specialty": "visual-analysis",
+      "accepts": ["analyze-image", "screenshot", "diagram"],
+      "model": "claude-opus-4.8",
+      "tier": "high"
+    },
+    {
+      "name": "hello-oh-my-orq",
+      "specialty": "demo",
+      "accepts": ["demo", "tutorial", "test-install"],
+      "model": "claude-haiku-4.5",
+      "tier": "low"
+    }
+  ]
+}

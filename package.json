@@ -1,0 +1,54 @@
+{
+  "name": "oh-my-orq",
+  "version": "1.0.0",
+  "description": "Multi-agent orchestration framework for AI-powered application generation — 28 specialized agents with shared memory, token optimization, and usage dashboard",
+  "main": "cli/install.js",
+  "bin": {
+    "orq": "cli/orq.js",
+    "oh-my-orq": "cli/install.js"
+  },
+  "scripts": {
+    "postinstall": "node cli/install.js",
+    "test": "node memory/cortex.js --test && node token-optimization/optimizer.js --test",
+    "test:memory": "node memory/cortex.js --test",
+    "test:optimizer": "node token-optimization/optimizer.js --test",
+    "dashboard": "open dashboard/index.html",
+    "list": "node cli/orq.js list"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/oh-my-orq.git"
+  },
+  "keywords": [
+    "ai",
+    "agents",
+    "multi-agent",
+    "orchestration",
+    "antigravity",
+    "llm",
+    "token-optimization",
+    "code-generation",
+    "ai-development",
+    "framework"
+  ],
+  "author": "Oh My Orq",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "cli/",
+    "skills/",
+    "workflows/",
+    "delegation/",
+    "memory/",
+    "dashboard/",
+    "token-optimization/",
+    "subagents/",
+    "docs/",
+    "bin/",
+    "README.md",
+    "LICENSE",
+    "package.json"
+  ]
+}

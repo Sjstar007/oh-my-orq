@@ -1,0 +1,73 @@
+{
+  "version": "1.0.0",
+  "description": "AI Backend Routing Configuration — maps task types to optimal AI models",
+  "routing_rules": {
+    "planning": {
+      "primary": "claude-opus-4.8",
+      "fallback": "claude-sonnet-5",
+      "reason": "Strategic thinking and PRD creation requires deep reasoning"
+    },
+    "architecture": {
+      "primary": "gpt-5.6-sol",
+      "fallback": "claude-opus-4.8",
+      "reason": "Complex, detailed architecture design requires meticulous attention"
+    },
+    "frontend": {
+      "primary": "gemini-2.5-pro",
+      "fallback": "claude-opus-4.8",
+      "reason": "Gemini excels at UI/UX design and frontend implementation"
+    },
+    "backend": {
+      "primary": "claude-sonnet-5",
+      "fallback": "claude-opus-4.8",
+      "reason": "Fast, clean backend code with good structure"
+    },
+    "backend-complex": {
+      "primary": "claude-opus-4.8",
+      "fallback": "gpt-5.6-sol",
+      "reason": "Complex algorithms and concurrent logic need deep reasoning"
+    },
+    "debugging": {
+      "primary": "gpt-5.6-sol",
+      "fallback": "claude-sonnet-5",
+      "reason": "Meticulous bug tracking requires detailed analysis"
+    },
+    "testing": {
+      "primary": "gpt-5.6-sol",
+      "fallback": "claude-sonnet-5",
+      "reason": "Thorough test case generation needs attention to detail"
+    },
+    "documentation": {
+      "primary": "claude-sonnet-5",
+      "fallback": "gemini-2.5-flash",
+      "reason": "Clear, well-structured documentation writing"
+    },
+    "research": {
+      "primary": "gemini-2.5-flash",
+      "fallback": "claude-haiku-4.5",
+      "reason": "Fast research and information gathering"
+    },
+    "quick-tasks": {
+      "primary": "gemini-2.5-flash",
+      "fallback": "claude-haiku-4.5",
+      "reason": "Speed and cost efficiency for simple tasks"
+    }
+  },
+  "cost_tiers": {
+    "high": {
+      "models": ["claude-opus-4.8", "gpt-5.6-sol"],
+      "use_for": ["complex reasoning", "architecture", "security audit", "advanced ML"],
+      "avg_cost_per_1m_tokens": 15.0
+    },
+    "mid": {
+      "models": ["claude-sonnet-5", "gemini-2.5-pro", "gpt-5.6-terra"],
+      "use_for": ["implementation", "standard analysis", "documentation", "refactoring"],
+      "avg_cost_per_1m_tokens": 6.0
+    },
+    "low": {
+      "models": ["claude-haiku-4.5", "gemini-2.5-flash", "gpt-5.4-nano"],
+      "use_for": ["research", "code search", "simple tasks", "git operations"],
+      "avg_cost_per_1m_tokens": 1.0
+    }
+  }
+}
