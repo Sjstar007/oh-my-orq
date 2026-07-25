@@ -56,6 +56,10 @@ switch (command) {
     handleNotify(args.slice(1).join(' '));
     break;
 
+  case 'graph':
+    openGraph();
+    break;
+
   case 'tokens':
     showTokens();
     break;
@@ -245,6 +249,17 @@ function handleCompactRestore(sessionId) {
 
 function showTokens() {
   handleMemory(['tokens']);
+}
+
+function openGraph() {
+  const graphPath = path.join(__dirname, '..', 'dashboard', 'architecture-graph.html');
+  const opener = os.platform() === 'darwin' ? 'open' : os.platform() === 'win32' ? 'start' : 'xdg-open';
+  try {
+    execSync(`${opener} "${graphPath}"`);
+    console.log('🌐 Interactive Architecture Graph opened in browser');
+  } catch (e) {
+    console.log(`📂 Open this file in your browser: ${graphPath}`);
+  }
 }
 
 function openDashboard() {

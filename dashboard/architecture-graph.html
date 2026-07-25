@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>oh-my-orq — Interactive System Architecture & Flow Graph</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090a0f;
+      --card-bg: rgba(18, 20, 32, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent-purple: #7c5cfc;
+      --accent-cyan: #00f2fe;
+      --accent-pink: #ff007f;
+      --accent-green: #00e676;
+      --accent-orange: #ff9100;
+      --text-main: #f0f3fd;
+      --text-muted: #8a94b0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    /* Glassmorphism Header */
+    header {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 100;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    header h1 {
+      font-size: 20px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    header span.badge {
+      background: rgba(124, 92, 252, 0.2);
+      color: var(--accent-cyan);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Category Filter Bar */
+    .controls {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 12px 18px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .filter-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn.active, .filter-btn:hover {
+      background: linear-gradient(135deg, rgba(124, 92, 252, 0.3), rgba(0, 242, 254, 0.3));
+      border-color: var(--accent-cyan);
+      color: var(--text-main);
+      box-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
+    }
+
+    /* Node Inspector Panel */
+    .inspector {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 360px;
+      z-index: 100;
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+      transform: translateY(120%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .inspector.open {
+      transform: translateY(0);
+    }
+
+    .inspector h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .inspector .subsystem-tag {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 12px;
+      text-transform: uppercase;
+    }
+
+    .inspector p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .inspector .file-path {
+      font-family: 'Fira Code', monospace;
+      font-size: 11px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--accent-cyan);
+      word-break: break-all;
+    }
+
+    /* D3 SVG Container */
+    #graph-container {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Node Styling */
+    .node circle {
+      stroke-width: 2px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .node:hover circle {
+      stroke-width: 4px;
+      filter: drop-shadow(0 0 12px rgba(0, 242, 254, 0.8));
+    }
+
+    .node text {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      fill: var(--text-main);
+      pointer-events: none;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    .link {
+      stroke-opacity: 0.3;
+      stroke-dasharray: 4 4;
+      animation: dash 30s linear infinite;
+    }
+
+    @keyframes dash {
+      to {
+        stroke-dashoffset: -1000;
+      }
+    }
+
+    /* Animated Pulses along Links */
+    .pulse-particle {
+      fill: var(--accent-cyan);
+      filter: drop-shadow(0 0 8px var(--accent-cyan));
+    }
+
+    .legend {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      z-index: 100;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 14px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 11px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-color {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>⚡ oh-my-orq</h1>
+    <span class="badge">D3 Architecture Graph</span>
+  </header>
+
+  <div class="controls">
+    <button class="filter-btn active" onclick="filterGraph('all')">All Layers</button>
+    <button class="filter-btn" onclick="filterGraph('Client')">1. Client / IDE</button>
+    <button class="filter-btn" onclick="filterGraph('AgentHarness')">2. Agent Harness</button>
+    <button class="filter-btn" onclick="filterGraph('Hooks')">3. Hooks System</button>
+    <button class="filter-btn" onclick="filterGraph('Optimization')">4. Token Engine</button>
+    <button class="filter-btn" onclick="filterGraph('Storage')">5. Cortex Storage</button>
+    <button class="filter-btn" onclick="filterGraph('External')">6. MCP & Hermes</button>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-color" style="background: #00f2fe;"></div> Client & IDE Layer</div>
+    <div class="legend-item"><div class="legend-color" style="background: #7c5cfc;"></div> Agent Harness & Orchestration</div>
+    <div class="legend-item"><div class="legend-color" style="background: #ff007f;"></div> Hooks Interception System</div>
+    <div class="legend-item"><div class="legend-color" style="background: #ff9100;"></div> Token Optimization Subsystems</div>
+    <div class="legend-item"><div class="legend-color" style="background: #00e676;"></div> Shared Storage (Project Cortex)</div>
+    <div class="legend-item"><div class="legend-color" style="background: #e040fb;"></div> MCP Gateway & Hermes Messenger</div>
+  </div>
+
+  <div id="graph-container"></div>
+
+  <div class="inspector" id="inspector">
+    <h3>
+      <span id="node-icon">🤖</span>
+      <span id="node-name">Select a node</span>
+      <span class="subsystem-tag" id="node-tag" style="background: var(--accent-purple); color: #fff;">Agent</span>
+    </h3>
+    <p id="node-desc">Click any node in the interactive graph to inspect its internal connections, responsibilities, and source file path.</p>
+    <div class="file-path" id="node-file">Source: cli/orq.js</div>
+  </div>
+
+  <script>
+    // =========================================================
+    // GRAPH DATA DEFINITION (Nodes & Links across 6 Subsystems)
+    // =========================================================
+    const graphData = {
+      nodes: [
+        // Layer 1: Client & IDE Layer
+        { id: "UserPrompt", name: "User Prompt / Slash Cmd", layer: "Client", color: "#00f2fe", radius: 14, icon: "💬", desc: "User input or slash commands (/ultrawork, /research, /ralph, /learn).", file: "Antigravity IDE / VS Code / Terminal" },
+        { id: "CLI", name: "orq CLI Entrypoint", layer: "Client", color: "#00f2fe", radius: 12, icon: "⚡", desc: "Command line interface parser handling list, learn, coach, memory, and dashboard.", file: "cli/orq.js" },
+        
+        // Layer 2: Agent Harness Layer
+        { id: "Apex1", name: "Apex-1 (Master Orchestrator)", layer: "AgentHarness", color: "#7c5cfc", radius: 18, icon: "👑", desc: "Decomposes complex requests, delegates to subagents, enforces quality loops.", file: "skills/apex-1/SKILL.md" },
+        { id: "Vector", name: "Vector (Strategic Planner)", layer: "AgentHarness", color: "#7c5cfc", radius: 14, icon: "📐", desc: "Generates 3-7 stage execution plans with resource & token estimates.", file: "skills/vector/SKILL.md" },
+        { id: "Aura", name: "Aura (Plan Consultant)", layer: "AgentHarness", color: "#7c5cfc", radius: 13, icon: "🔍", desc: "Validates execution plans, assesses risk, and provides optimization advice.", file: "skills/aura/SKILL.md" },
+        
+        // Key Specialist Subagents
+        { id: "Atlas", name: "Atlas (System Architect)", layer: "AgentHarness", color: "#7c5cfc", radius: 12, icon: "🏛️", desc: "High-level architecture, system design, and tech stack evaluation.", file: "skills/atlas/SKILL.md" },
+        { id: "Forge", name: "Forge (Backend Engineer)", layer: "AgentHarness", color: "#7c5cfc", radius: 12, icon: "⚒️", desc: "Production backend code implementation, REST APIs, and database logic.", file: "skills/forge/SKILL.md" },
+        { id: "Nova", name: "Nova (UI/UX Frontend)", layer: "AgentHarness", color: "#7c5cfc", radius: 12, icon: "🎨", desc: "Responsive UI layout, glassmorphism CSS, and accessibility components.", file: "skills/nova/SKILL.md" },
+        { id: "Aegis", name: "Aegis (Automated Tester)", layer: "AgentHarness", color: "#7c5cfc", radius: 12, icon: "🛡️", desc: "Generates automated unit, integration, and E2E test suites (80%+ coverage).", file: "skills/aegis/SKILL.md" },
+        { id: "Link", name: "Link (MCP Orchestrator)", layer: "AgentHarness", color: "#7c5cfc", radius: 12, icon: "🔌", desc: "Interactions with Model Context Protocol (MCP) servers (GitHub, Postgres, Search).", file: "skills/link/SKILL.md" },
+        { id: "Sync", name: "Sync (Git & PR Master)", layer: "AgentHarness", color: "#7c5cfc", radius: 12, icon: "🐙", desc: "Atomic commits, interactive pull/push, branch rebase, and PR creation.", file: "skills/sync/SKILL.md" },
+
+        // Layer 3: Hooks Interception System
+        { id: "PreHook", name: "PreToolUse Hook", layer: "Hooks", color: "#ff007f", radius: 16, icon: "🪝", desc: "Intercepts tool calls BEFORE sending to LLM. Applies Delta Mode, AST Skeletons, Archiving, and Memory Recall.", file: "hooks/PreToolUse.js" },
+        { id: "PostHook", name: "PostToolUse Hook", layer: "Hooks", color: "#ff007f", radius: 16, icon: "🪝", desc: "Executes AFTER tool calls finish. Logs token counts, costs, captures learnings, and triggers notifications.", file: "hooks/PostToolUse.js" },
+        { id: "LearningHook", name: "LearningHook Scanner", layer: "Hooks", color: "#ff007f", radius: 13, icon: "🧠", desc: "Scans project repository to extract coding conventions into .oh-my-orq/patterns.json.", file: "hooks/LearningHook.js" },
+
+        // Layer 4: Token Optimization Subsystems
+        { id: "DeltaEngine", name: "Delta Mode Engine", layer: "Optimization", color: "#ff9100", radius: 11, icon: "🔄", desc: "Replaces file re-reads with unified git diffs (saves 85-95% tokens).", file: "token-optimization/delta-mode.js" },
+        { id: "SkeletonEngine", name: "Code Skeleton Generator", layer: "Optimization", color: "#ff9100", radius: 11, icon: "🦴", desc: "Replaces code file reads with AST-style signatures, classes, and imports.", file: "token-optimization/skeletons.js" },
+        { id: "OutputCompressor", name: "Output Compressor", layer: "Optimization", color: "#ff9100", radius: 11, icon: "🗜️", desc: "Rewrites verbose pytest, npm, git log, and grep outputs to summaries + failure snippets.", file: "token-optimization/output-compressor.js" },
+        { id: "ArchiveStore", name: "Progressive Disclosure Store", layer: "Optimization", color: "#ff9100", radius: 11, icon: "📦", desc: "Archives tool outputs >4KB to disk and returns a 100-token preview + 'orq expand' pointer.", file: "token-optimization/archive-store.js" },
+        { id: "LoopDetector", name: "Loop Detector", layer: "Optimization", color: "#ff9100", radius: 11, icon: "🔁", desc: "Detects repeated failing tool calls (confidence >0.7) and injects corrective warnings.", file: "token-optimization/loop-detector.js" },
+        { id: "CompactionEngine", name: "Compaction Engine", layer: "Optimization", color: "#ff9100", radius: 11, icon: "🛡️", desc: "Saves pre-compaction session checkpoints and restores post-compaction Context Intel Digests.", file: "memory/compaction.js" },
+        { id: "KeepWarm", name: "Keep-Warm Cache Pinger", layer: "Optimization", color: "#ff9100", radius: 11, icon: "🔥", desc: "Refreshes API prompt cache TTL every 4 minutes for 0.1x cost.", file: "token-optimization/keep-warm.js" },
+        { id: "QualityCoach", name: "Quality Coach", layer: "Optimization", color: "#ff9100", radius: 11, icon: "📊", desc: "Calculates real-time context health grades (S-F) and runs 30-day token waste audits.", file: "token-optimization/coach.js" },
+
+        // Layer 5: Shared Storage (Cortex)
+        { id: "CortexDB", name: "Project Cortex DB", layer: "Storage", color: "#00e676", radius: 16, icon: "🧠", desc: "Persistent project-scoped memory store surviving IDE restarts and context compaction.", file: ".oh-my-orq/memory/cortex.json" },
+        { id: "PatternStore", name: "Codebase Pattern Store", layer: "Storage", color: "#00e676", radius: 12, icon: "📋", desc: "Stores detected codebase style conventions (CommonJS/ES6, camelCase, async/await).", file: ".oh-my-orq/patterns.json" },
+        { id: "ArchivesDisk", name: "Archive Disk Storage", layer: "Storage", color: "#00e676", radius: 12, icon: "💾", desc: "Stores archived tool output text files (>4KB) for retrieval on demand.", file: ".oh-my-orq/archives/*.txt" },
+        { id: "CheckpointsDisk", name: "Pre-Compaction Store", layer: "Storage", color: "#00e676", radius: 12, icon: "📌", desc: "Stores session state snapshots before IDE auto-compaction.", file: ".oh-my-orq/checkpoints/*.json" },
+
+        // Layer 6: External Integrations
+        { id: "MCPGateway", name: "MCP Gateway Server", layer: "External", color: "#e040fb", radius: 14, icon: "🔌", desc: "Model Context Protocol integration with GitHub, PostgreSQL, Filesystem, and Web Search.", file: "mcp/mcp_config.json" },
+        { id: "HermesEngine", name: "Hermes Messenger Engine", layer: "External", color: "#e040fb", radius: 14, icon: "☤", desc: "Dispatches desktop notifications (macOS/Linux/Windows) and Slack/Discord webhooks.", file: "hermes/messenger.js" },
+        { id: "DashboardUI", name: "Usage & Cost Dashboard", layer: "External", color: "#e040fb", radius: 14, icon: "📈", desc: "Real-time single page web app displaying token charts, pricing tables, and cost breakdown.", file: "dashboard/index.html" }
+      ],
+
+      links: [
+        { source: "UserPrompt", target: "CLI", value: 2 },
+        { source: "UserPrompt", target: "Apex1", value: 3 },
+        { source: "CLI", target: "Apex1", value: 2 },
+        
+        { source: "Apex1", target: "Vector", value: 3 },
+        { source: "Vector", target: "Aura", value: 2 },
+        { source: "Apex1", target: "Atlas", value: 2 },
+        { source: "Apex1", target: "Forge", value: 3 },
+        { source: "Apex1", target: "Nova", value: 2 },
+        { source: "Apex1", target: "Aegis", value: 2 },
+        { source: "Apex1", target: "Link", value: 2 },
+        { source: "Apex1", target: "Sync", value: 2 },
+
+        { source: "Forge", target: "PreHook", value: 3 },
+        { source: "Nova", target: "PreHook", value: 2 },
+        { source: "Atlas", target: "PreHook", value: 2 },
+
+        { source: "PreHook", target: "LoopDetector", value: 2 },
+        { source: "PreHook", target: "DeltaEngine", value: 3 },
+        { source: "PreHook", target: "SkeletonEngine", value: 2 },
+        { source: "PreHook", target: "OutputCompressor", value: 2 },
+        { source: "PreHook", target: "ArchiveStore", value: 2 },
+        { source: "PreHook", target: "CortexDB", value: 3 },
+        { source: "LearningHook", target: "PatternStore", value: 2 },
+
+        { source: "ArchiveStore", target: "ArchivesDisk", value: 2 },
+        { source: "CompactionEngine", target: "CheckpointsDisk", value: 2 },
+
+        { source: "PostHook", target: "CortexDB", value: 3 },
+        { source: "PostHook", target: "PatternStore", value: 2 },
+        { source: "PostHook", target: "DashboardUI", value: 2 },
+        { source: "PostHook", target: "HermesEngine", value: 3 },
+
+        { source: "Link", target: "MCPGateway", value: 3 },
+        { source: "HermesEngine", target: "UserPrompt", value: 2 }
+      ]
+    };
+
+    // =========================================================
+    // D3 FORCE-DIRECTED GRAPH RENDERER
+    // =========================================================
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    const svg = d3.select("#graph-container")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .call(d3.zoom().on("zoom", (event) => {
+        g.attr("transform", event.transform);
+      }));
+
+    const g = svg.append("g");
+
+    // Force Simulation Setup
+    const simulation = d3.forceSimulation(graphData.nodes)
+      .force("link", d3.forceLink(graphData.links).id(d => d.id).distance(120))
+      .force("charge", d3.forceManyBody().strength(-350))
+      .force("center", d3.forceCenter(width / 2, height / 2))
+      .force("collision", d3.forceCollide().radius(d => d.radius + 20));
+
+    // Render Links
+    const link = g.append("g")
+      .selectAll("line")
+      .data(graphData.links)
+      .enter()
+      .append("line")
+      .attr("class", "link")
+      .attr("stroke", "#ffffff")
+      .attr("stroke-opacity", 0.25)
+      .attr("stroke-width", d => d.value);
+
+    // Render Nodes
+    const node = g.append("g")
+      .selectAll(".node")
+      .data(graphData.nodes)
+      .enter()
+      .append("g")
+      .attr("class", "node")
+      .call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended))
+      .on("click", (event, d) => inspectNode(d));
+
+    // Circle background for nodes
+    node.append("circle")
+      .attr("r", d => d.radius)
+      .attr("fill", d => d.color)
+      .attr("stroke", "#ffffff")
+      .attr("stroke-opacity", 0.4);
+
+    // Icon & Label inside node
+    node.append("text")
+      .attr("dx", d => d.radius + 8)
+      .attr("dy", ".35em")
+      .text(d => `${d.icon} ${d.name}`);
+
+    // Simulation Tick Update
+    simulation.on("tick", () => {
+      link
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
+
+      node
+        .attr("transform", d => `translate(${d.x},${d.y})`);
+    });
+
+    // Drag Handlers
+    function dragstarted(event, d) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = d.x;
+      d.fy = d.y;
+    }
+
+    function dragged(event, d) {
+      d.fx = event.x;
+      d.fy = event.y;
+    }
+
+    function dragended(event, d) {
+      if (!event.active) simulation.alphaTarget(0);
+      d.fx = null;
+      d.fy = null;
+    }
+
+    // Node Inspector Trigger
+    function inspectNode(d) {
+      document.getElementById('node-icon').innerText = d.icon;
+      document.getElementById('node-name').innerText = d.name;
+      document.getElementById('node-tag').innerText = d.layer;
+      document.getElementById('node-tag').style.background = d.color;
+      document.getElementById('node-desc').innerText = d.desc;
+      document.getElementById('node-file').innerText = `Source: ${d.file}`;
+      document.getElementById('inspector').classList.add('open');
+    }
+
+    // Filter Graph by Layer
+    function filterGraph(layer) {
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      node.style("opacity", d => (layer === 'all' || d.layer === layer) ? 1 : 0.15);
+      link.style("opacity", d => (layer === 'all' || d.source.layer === layer || d.target.layer === layer) ? 0.3 : 0.05);
+    }
+  </script>
+</body>
+</html>

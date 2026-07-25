@@ -35,6 +35,13 @@
 
 ---
 
+## 🏗️ Architecture & Internal Wireframe
+
+- **[Internal Wireframe & Interaction Map](docs/internal-wireframe.md)** — Detailed block diagrams showing how Agents, Hooks, Shared Storage (Cortex), MCP Gateway, and Hermes interact.
+- **[Architecture & IDE Usage Guide](docs/architecture.md)** — Execution sequence diagrams, flowcharts, and Antigravity / VS Code integration steps.
+
+---
+
 ## 🤖 Full Agent Catalog (30 Specialized Agents)
 
 ### 🏔️ 1. Orchestration & Planning (3 Agents)
