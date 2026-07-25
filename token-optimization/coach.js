@@ -52,7 +52,7 @@ class QualityCoach {
     const quality = this.calculateQualityScore(totalTokens);
 
     let report = `\n⚡ ====================================================\n`;
-    report += `🎯 AGENTFORGE TOKEN COACH AUDIT REPORT\n`;
+    report += `🎯 OH MY ORQ TOKEN COACH AUDIT REPORT\n`;
     report += `====================================================\n\n`;
 
     report += `📊 Context Health Grade: ${quality.grade} (${quality.score}/100) — ${quality.status}\n`;
