@@ -104,10 +104,23 @@
 
 ---
 
-## 🚀 Quick Start
+## 📦 Agent Installation Commands
 
 ```bash
-npx oh-my-orq
+# Install All 30 Agents (Global / Antigravity IDE)
+orq install all
+
+# Install All 30 Agents into Current Project (.agents/skills)
+orq install all --project
+
+# Install Master Orchestrator Agent Only (Apex-1 orchestrates all subagents)
+orq install apex-1
+
+# Install Master Orchestrator into Current Project (.agents/skills)
+orq install apex-1 --project
+
+# Install specific specialist agent
+orq install forge --project
 ```
 
 ## 📋 CLI Commands
@@ -117,7 +130,7 @@ npx oh-my-orq
 orq list                         # List all 30 agents and their specialties
 
 # Agent Management
-orq install <agent> [--project]  # Install an agent globally or project-scoped
+orq install <agent|all|apex-1> [--project]  # Install all, apex-1, or specific agent
 orq remove <agent>               # Remove an agent
 
 # Messaging & Notifications (Hermes)

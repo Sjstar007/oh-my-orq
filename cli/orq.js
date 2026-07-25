@@ -144,13 +144,31 @@ function listAgents() {
 
 function installAgent(name, projectScope) {
   if (!name) {
-    console.error('Usage: orq install <agent-name> [--project]');
+    console.error('Usage: orq install <agent-name|all|apex-1> [--project]');
     process.exit(1);
   }
 
-  const sourceDir = path.join(__dirname, '..', 'skills', name);
+  const allSkillsDir = path.join(__dirname, '..', 'skills');
+
+  if (name === 'all') {
+    const skills = fs.readdirSync(allSkillsDir).filter(f => fs.statSync(path.join(allSkillsDir, f)).isDirectory());
+    let count = 0;
+    for (const skill of skills) {
+      const src = path.join(allSkillsDir, skill);
+      const dest = projectScope
+        ? path.join(process.cwd(), '.agents', 'skills', skill)
+        : path.join(skillsDir, skill);
+      copyDirSync(src, dest);
+      count++;
+    }
+    console.log(`✅ Installed all ${count} agents to ${projectScope ? './.agents/skills' : skillsDir}`);
+    return;
+  }
+
+  const sourceDir = path.join(allSkillsDir, name);
   if (!fs.existsSync(sourceDir)) {
     console.error(`Agent "${name}" not found in available skills.`);
+    console.error(`Available agents: all, apex-1, vector, aura, atlas, forge, nova, aegis, etc.`);
     process.exit(1);
   }
 
@@ -159,7 +177,7 @@ function installAgent(name, projectScope) {
     : path.join(skillsDir, name);
 
   copyDirSync(sourceDir, destDir);
-  console.log(`✅ Installed "${name}" to ${destDir}`);
+  console.log(`✅ Installed agent "${name}" to ${destDir}`);
 }
 
 function removeAgent(name) {

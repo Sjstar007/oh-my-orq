@@ -2,7 +2,7 @@
 
 /**
  * Oh My Orq Post-Install Setup Script
- * Runs automatically when installed via npm install -g oh-my-orq or npx
+ * Runs automatically when installed via npm i -g oh-my-orq or npx
  */
 
 const path = require('path');
